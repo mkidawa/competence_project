@@ -1,6 +1,6 @@
 package pl.awjkmkkk.view.constant;
 
-public class Constants {
+public class ViewConstants {
 
     /*------------------------ FIELDS REGION ------------------------*/
     public static final String PATH_MAIN_PANEL = "/panel/MainPanel.fxml";
@@ -11,6 +11,6 @@ public class Constants {
     public static final String PATH_CSS_LIGHT_STYLING = "/style/LightStyles.css";
 
     /*------------------------ METHODS REGION ------------------------*/
-    private Constants() {
+    private ViewConstants() {
     }
 }

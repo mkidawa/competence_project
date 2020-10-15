@@ -5,11 +5,11 @@ import javafx.stage.Stage;
 import pl.awjkmkkk.view.fxml.StageController;
 import pl.awjkmkkk.view.fxml.core.WindowDimensions;
 
-import static pl.awjkmkkk.view.constant.Constants.MAIN_PANEL_HEIGHT;
-import static pl.awjkmkkk.view.constant.Constants.MAIN_PANEL_WIDTH;
-import static pl.awjkmkkk.view.constant.Constants.PATH_CSS_DARK_STYLING;
-import static pl.awjkmkkk.view.constant.Constants.PATH_MAIN_PANEL;
-import static pl.awjkmkkk.view.constant.Constants.TITLE_MAIN_PANEL;
+import static pl.awjkmkkk.view.constant.ViewConstants.MAIN_PANEL_HEIGHT;
+import static pl.awjkmkkk.view.constant.ViewConstants.MAIN_PANEL_WIDTH;
+import static pl.awjkmkkk.view.constant.ViewConstants.PATH_CSS_DARK_STYLING;
+import static pl.awjkmkkk.view.constant.ViewConstants.PATH_MAIN_PANEL;
+import static pl.awjkmkkk.view.constant.ViewConstants.TITLE_MAIN_PANEL;
 
 public class GraphicalMode extends Application {
 
