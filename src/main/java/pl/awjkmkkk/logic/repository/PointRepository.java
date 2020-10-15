@@ -1,8 +1,8 @@
 package pl.awjkmkkk.logic.repository;
 
-import pl.awjkmkkk.logic.model.Hotspot;
+import pl.awjkmkkk.logic.model.Point;
 
-public class HotspotRepository extends BaseRepository<Hotspot> {
+public class PointRepository extends BaseRepository<Point> {
 
     /*------------------------ FIELDS REGION ------------------------*/
 

@@ -1,6 +1,6 @@
 package pl.awjkmkkk.logic.model;
 
-public class Hotspot extends BaseEntity {
+public class Point extends BaseEntity {
 
     /*------------------------ FIELDS REGION ------------------------*/
 
