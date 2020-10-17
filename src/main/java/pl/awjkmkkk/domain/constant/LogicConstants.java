@@ -1,8 +1,6 @@
-package pl.awjkmkkk.logic.repository;
+package pl.awjkmkkk.domain.constant;
 
-import pl.awjkmkkk.logic.model.Person;
-
-public class PersonRepository implements BaseRepository<Person> {
+public class LogicConstants {
 
     /*------------------------ FIELDS REGION ------------------------*/
 

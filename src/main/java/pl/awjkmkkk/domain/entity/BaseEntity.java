@@ -1,4 +1,4 @@
-package pl.awjkmkkk.logic.model;
+package pl.awjkmkkk.domain.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -10,7 +10,7 @@ import java.util.UUID;
 public abstract class BaseEntity implements Serializable {
 
     /*------------------------ FIELDS REGION ------------------------*/
-    private UUID uuid = UUID.randomUUID();
+    private final UUID uuid = UUID.randomUUID();
 
     /*------------------------ METHODS REGION ------------------------*/
     public UUID getUuid() {
