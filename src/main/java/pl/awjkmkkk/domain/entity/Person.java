@@ -1,7 +1,5 @@
 package pl.awjkmkkk.domain.entity;
 
-import pl.awjkmkkk.domain.entity.type.PointType;
-
 public class Person extends BaseEntity {
 
     public enum Profile {
@@ -19,7 +17,6 @@ public class Person extends BaseEntity {
         public String getName() {
             return name;
         }
-
     }
 
     private String phoneNumber;
@@ -45,5 +42,4 @@ public class Person extends BaseEntity {
     public void setPersonProfile(Profile personProfile) {
         this.personProfile = personProfile;
     }
-
 }
