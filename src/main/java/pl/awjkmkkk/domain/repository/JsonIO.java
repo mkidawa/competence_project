@@ -17,11 +17,10 @@ public class JsonIO {
     private Gson gson = new Gson();
 
     /*------------------------ METHODS REGION ------------------------*/
-    public <T> void writeToFile(List<T> jsonData,
+    public <T> void writeToFile(Class<T> clazz, List<T> jsonData,
                                 String filename) throws ReaderException {
         try (FileWriter fileWriter = new FileWriter(filename)) {
-            Type type = new TypeToken<ArrayList<T>>() {
-            }.getType();
+            Type type = TypeToken.getParameterized(List.class, clazz).getType();
             gson.toJson(jsonData, type, fileWriter);
         } catch (IOException e) {
             throw new ReaderException(e);
