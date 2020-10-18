@@ -1,5 +1,9 @@
 package pl.awjkmkkk.domain.entity;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Point extends BaseEntity {
 
     public enum PointType {
@@ -61,5 +65,48 @@ public class Point extends BaseEntity {
 
     public void setPosition(float position) {
         this.position = position;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Point point = (Point) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(position, point.position)
+                .append(name, point.name)
+                .append(description, point.description)
+                .append(type, point.type)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(name)
+                .append(description)
+                .append(type)
+                .append(position)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("name", name)
+                .append("description", description)
+                .append("type", type)
+                .append("position", position)
+                .toString();
     }
 }

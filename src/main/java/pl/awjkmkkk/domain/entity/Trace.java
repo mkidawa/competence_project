@@ -1,5 +1,9 @@
 package pl.awjkmkkk.domain.entity;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -55,5 +59,48 @@ public class Trace extends BaseEntity {
 
     public void getTimeSpent() {
         // TODO Implement method
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Trace trace = (Trace) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(userId, trace.userId)
+                .append(pointId, trace.pointId)
+                .append(timeOfEntry, trace.timeOfEntry)
+                .append(timeOfExit, trace.timeOfExit)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(userId)
+                .append(pointId)
+                .append(timeOfEntry)
+                .append(timeOfExit)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("userId", userId)
+                .append("pointId", pointId)
+                .append("timeOfEntry", timeOfEntry)
+                .append("timeOfExit", timeOfExit)
+                .toString();
     }
 }
