@@ -6,11 +6,8 @@ import pl.awjkmkkk.domain.exception.ReaderException;
 import pl.awjkmkkk.domain.exception.UpdateNotPossible;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import static pl.awjkmkkk.domain.constant.Constants.PATH_FILE_PERSONS;
 
 public class PersonRepository implements BaseRepository<Person> {
 
