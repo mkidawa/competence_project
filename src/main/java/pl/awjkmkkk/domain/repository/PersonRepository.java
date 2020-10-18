@@ -24,14 +24,10 @@ public class PersonRepository implements BaseRepository<Person> {
         this.filename = filename;
     }
 
-    public List<Person> getPeople() {
-        return Collections.unmodifiableList(people);
-    }
-
     @Override
     public List<Person> findAll() throws ReaderException {
         readData();
-        return getPeople();
+        return people;
     }
 
     @Override
@@ -69,7 +65,7 @@ public class PersonRepository implements BaseRepository<Person> {
     @Override
     public void deleteById(UUID uuid) throws ReaderException, ObjectNotFound {
         readData();
-        people.remove(findByUuid(uuid));
+        people.removeIf((it) -> it.getUuid().equals(uuid));
         writeData();
     }
 
