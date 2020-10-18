@@ -15,6 +15,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static pl.awjkmkkk.domain.constant.Constants.NUMBER_OF_RECORDS_IN_FILE;
 import static pl.awjkmkkk.domain.constant.Constants.PATH_FILE_MOCK_POINTS;
 
@@ -74,6 +75,13 @@ class PointRepositoryTest {
                         .get()
                         .getType()
         );
+    }
+
+    @Test
+    void updateExceptionTest() {
+        assertThrows(UpdateNotPossible.class, () -> {
+            pointRepository.update(new Point("abc", "cde", Point.PointType.INDOOR, 1.15f));
+        });
     }
 
     @Test

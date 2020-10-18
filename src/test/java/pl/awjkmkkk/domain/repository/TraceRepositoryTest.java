@@ -16,6 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static pl.awjkmkkk.domain.constant.Constants.NUMBER_OF_RECORDS_IN_FILE;
 import static pl.awjkmkkk.domain.constant.Constants.PATH_FILE_MOCK_TRACES;
 
@@ -79,6 +80,14 @@ class TraceRepositoryTest {
                         .get()
                         .getTimeOfExit()
         );
+    }
+
+    @Test
+    void updateExceptionTest() {
+        assertThrows(UpdateNotPossible.class, () -> {
+            traceRepository.update(new Trace(UUID.randomUUID(), UUID.randomUUID(),
+                    LocalDateTime.now(), LocalDateTime.now()));
+        });
     }
 
     @Test
