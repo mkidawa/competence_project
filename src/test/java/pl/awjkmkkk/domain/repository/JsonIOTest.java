@@ -1,7 +1,9 @@
 package pl.awjkmkkk.domain.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.awjkmkkk.domain.entity.Person;
+import pl.awjkmkkk.domain.exception.ReaderException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static pl.awjkmkkk.domain.constant.Constants.NUMBER_OF_RECORDS_IN_FILE;
 
 class JsonIOTest {
@@ -17,17 +20,34 @@ class JsonIOTest {
     /*------------------------ FIELDS REGION ------------------------*/
     private static final String TEST_FILENAME = "./sampleFile.json";
     private JsonIO jsonIO = new JsonIO();
+    List<Person> people = new ArrayList<>();
 
     /*------------------------ METHODS REGION ------------------------*/
-    @Test
-    void readWriteTest() throws IOException {
+    @BeforeEach
+    void setUp() throws IOException {
         Files.deleteIfExists(Paths.get(TEST_FILENAME));
-        List<Person> people = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_RECORDS_IN_FILE; i++) {
             people.add(new Person(String.valueOf(i * 10), Person.Profile.STUDENT));
         }
+    }
 
+    @Test
+    void readWriteTest() throws IOException {
         jsonIO.writeToFile(Person.class, people, TEST_FILENAME);
         assertEquals(people, jsonIO.readFromFile(Person.class, TEST_FILENAME));
+    }
+
+    @Test
+    void readExceptionTest() {
+        assertThrows(ReaderException.class, () -> {
+            jsonIO.readFromFile(Person.class, "///");
+        });
+    }
+
+    @Test
+    void writeExceptionTest() {
+        assertThrows(ReaderException.class, () -> {
+            jsonIO.writeToFile(Person.class, people, "///");
+        });
     }
 }
