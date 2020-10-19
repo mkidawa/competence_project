@@ -13,7 +13,7 @@ public class PersonRepository implements BaseRepository<Person> {
 
     /*------------------------ FIELDS REGION ------------------------*/
     private final JsonIO jsonIO = new JsonIO();
-    private List<Person> people = new ArrayList<>();
+    private List<Person> people;
     private final String filename;
 
     /*------------------------ METHODS REGION ------------------------*/
@@ -41,6 +41,11 @@ public class PersonRepository implements BaseRepository<Person> {
     @Override
     public void save(Person object) throws ReaderException {
         updateData(() -> people.add(object));
+    }
+
+    @Override
+    public void saveAll(List<Person> objects) {
+
     }
 
     @Override
@@ -78,7 +83,13 @@ public class PersonRepository implements BaseRepository<Person> {
     }
 
     private void readData() throws ReaderException {
-        people = jsonIO.readFromFile(Person.class, this.filename);
+        List<Person> peopleTemp = jsonIO.readFromFile(Person.class, this.filename);
+
+        if (peopleTemp != null) {
+            this.people = peopleTemp;
+        } else {
+            this.people = new ArrayList<>();
+        }
     }
 
     private void writeData() throws ReaderException {

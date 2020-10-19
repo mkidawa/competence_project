@@ -16,6 +16,8 @@ public interface BaseRepository<T extends BaseEntity> {
 
     void save(T object) throws ReaderException;
 
+    void saveAll(List<T> objects);
+
     void update(T object) throws ReaderException, UpdateNotPossible, ObjectNotFound;
 
     void deleteById(UUID uuid) throws ReaderException, ObjectNotFound;

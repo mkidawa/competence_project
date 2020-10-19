@@ -13,7 +13,7 @@ public class PointRepository implements BaseRepository<Point> {
 
     /*------------------------ FIELDS REGION ------------------------*/
     private final JsonIO jsonIO = new JsonIO();
-    private List<Point> points = new ArrayList<>();
+    private List<Point> points;
     private final String filename;
 
     /*------------------------ METHODS REGION ------------------------*/
@@ -41,6 +41,11 @@ public class PointRepository implements BaseRepository<Point> {
     @Override
     public void save(Point object) throws ReaderException {
         updateData(() -> points.add(object));
+    }
+
+    @Override
+    public void saveAll(List<Point> objects) {
+
     }
 
     @Override
@@ -78,7 +83,13 @@ public class PointRepository implements BaseRepository<Point> {
     }
 
     private void readData() throws ReaderException {
-        points = jsonIO.readFromFile(Point.class, this.filename);
+        List<Point> pointsTemp = jsonIO.readFromFile(Point.class, this.filename);
+
+        if (pointsTemp != null) {
+            this.points = pointsTemp;
+        } else {
+            this.points = new ArrayList<>();
+        }
     }
 
     private void writeData() throws ReaderException {

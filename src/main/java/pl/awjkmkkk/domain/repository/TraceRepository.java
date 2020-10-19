@@ -13,7 +13,7 @@ public class TraceRepository implements BaseRepository<Trace> {
 
     /*------------------------ FIELDS REGION ------------------------*/
     private final JsonIO jsonIO = new JsonIO();
-    private List<Trace> traces = new ArrayList<>();
+    private List<Trace> traces;
     private final String filename;
 
     /*------------------------ METHODS REGION ------------------------*/
@@ -41,6 +41,11 @@ public class TraceRepository implements BaseRepository<Trace> {
     @Override
     public void save(Trace object) throws ReaderException {
         updateData(() -> traces.add(object));
+    }
+
+    @Override
+    public void saveAll(List<Trace> objects) {
+
     }
 
     @Override
@@ -78,7 +83,13 @@ public class TraceRepository implements BaseRepository<Trace> {
     }
 
     private void readData() throws ReaderException {
-        traces = jsonIO.readFromFile(Trace.class, this.filename);
+        List<Trace> tracesTemp = jsonIO.readFromFile(Trace.class, this.filename);
+
+        if (tracesTemp != null) {
+            this.traces = tracesTemp;
+        } else {
+            this.traces = new ArrayList<>();
+        }
     }
 
     private void writeData() throws ReaderException {
