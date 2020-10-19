@@ -3,6 +3,7 @@ package pl.awjkmkkk.domain.repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.awjkmkkk.domain.entity.Person;
 import pl.awjkmkkk.domain.entity.Point;
 import pl.awjkmkkk.domain.exception.ObjectNotFound;
 import pl.awjkmkkk.domain.exception.ReaderException;
@@ -57,6 +58,19 @@ class PointRepositoryTest {
     void saveTest() throws ReaderException {
         pointRepository.save(new Point("abc", "cde", Point.PointType.INDOOR, 1.15f));
         assertEquals(NUMBER_OF_RECORDS_IN_FILE + 1, pointRepository.findAll().size());
+    }
+
+    @Test
+    void saveAllTest() throws ReaderException {
+        final int numberOfNewRecords = 3;
+        List<Point> pointsAdded = new ArrayList<>();
+        for (int i = 0; i < numberOfNewRecords; i++) {
+            pointsAdded.add(new Point("abc", "cde", Point.PointType.INDOOR, 1.15f));
+        }
+
+        pointRepository.saveAll(pointsAdded);
+        assertEquals(NUMBER_OF_RECORDS_IN_FILE + numberOfNewRecords,
+                pointRepository.findAll().size());
     }
 
     @Test

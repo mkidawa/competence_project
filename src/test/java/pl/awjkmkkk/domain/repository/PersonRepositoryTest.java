@@ -24,12 +24,12 @@ class PersonRepositoryTest {
     /*------------------------ FIELDS REGION ------------------------*/
     private JsonIO jsonIO = new JsonIO();
     private PersonRepository personRepository = new PersonRepository(PATH_FILE_MOCK_PERSONS);
-    List<Person> people = new ArrayList<>();
     private UUID chosenUuid;
 
     /*------------------------ METHODS REGION ------------------------*/
     @BeforeEach
     void setUp() throws ReaderException {
+        List<Person> people = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_RECORDS_IN_FILE; i++) {
             people.add(new Person(String.valueOf(i * 10), Person.Profile.STUDENT));
         }
@@ -57,6 +57,19 @@ class PersonRepositoryTest {
     void saveTest() throws ReaderException {
         personRepository.save(new Person(String.valueOf(10), Person.Profile.STUDENT));
         assertEquals(NUMBER_OF_RECORDS_IN_FILE + 1, personRepository.findAll().size());
+    }
+
+    @Test
+    void saveAllTest() throws ReaderException {
+        final int numberOfNewRecords = 3;
+        List<Person> peopleAdded = new ArrayList<>();
+        for (int i = 0; i < numberOfNewRecords; i++) {
+            peopleAdded.add(new Person(String.valueOf(i * 50), Person.Profile.STUDENT));
+        }
+
+        personRepository.saveAll(peopleAdded);
+        assertEquals(NUMBER_OF_RECORDS_IN_FILE + numberOfNewRecords,
+                personRepository.findAll().size());
     }
 
     @Test

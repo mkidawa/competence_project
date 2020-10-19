@@ -44,8 +44,8 @@ public class PersonRepository implements BaseRepository<Person> {
     }
 
     @Override
-    public void saveAll(List<Person> objects) {
-
+    public void saveAll(List<Person> objects) throws ReaderException {
+        updateData(() -> people.addAll(objects));
     }
 
     @Override

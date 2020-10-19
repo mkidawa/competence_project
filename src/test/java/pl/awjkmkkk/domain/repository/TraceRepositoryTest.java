@@ -3,6 +3,7 @@ package pl.awjkmkkk.domain.repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.awjkmkkk.domain.entity.Person;
 import pl.awjkmkkk.domain.entity.Trace;
 import pl.awjkmkkk.domain.exception.ObjectNotFound;
 import pl.awjkmkkk.domain.exception.ReaderException;
@@ -61,6 +62,20 @@ class TraceRepositoryTest {
         traceRepository.save(new Trace(UUID.randomUUID(),
                 UUID.randomUUID(), LocalDateTime.now(), LocalDateTime.now()));
         assertEquals(NUMBER_OF_RECORDS_IN_FILE + 1, traceRepository.findAll().size());
+    }
+
+    @Test
+    void saveAllTest() throws ReaderException {
+        final int numberOfNewRecords = 3;
+        List<Trace> traceAdded = new ArrayList<>();
+        for (int i = 0; i < numberOfNewRecords; i++) {
+            traceAdded.add(new Trace(UUID.randomUUID(), UUID.randomUUID(),
+                    LocalDateTime.now(), LocalDateTime.now()));
+        }
+
+        traceRepository.saveAll(traceAdded);
+        assertEquals(NUMBER_OF_RECORDS_IN_FILE + numberOfNewRecords,
+                traceRepository.findAll().size());
     }
 
     @Test

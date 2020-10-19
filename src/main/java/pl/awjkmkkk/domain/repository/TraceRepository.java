@@ -44,8 +44,8 @@ public class TraceRepository implements BaseRepository<Trace> {
     }
 
     @Override
-    public void saveAll(List<Trace> objects) {
-
+    public void saveAll(List<Trace> objects) throws ReaderException {
+        updateData(() -> traces.addAll(objects));
     }
 
     @Override

@@ -44,8 +44,8 @@ public class PointRepository implements BaseRepository<Point> {
     }
 
     @Override
-    public void saveAll(List<Point> objects) {
-
+    public void saveAll(List<Point> objects) throws ReaderException {
+        updateData(() -> points.addAll(objects));
     }
 
     @Override

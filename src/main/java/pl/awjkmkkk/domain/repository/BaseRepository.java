@@ -16,7 +16,7 @@ public interface BaseRepository<T extends BaseEntity> {
 
     void save(T object) throws ReaderException;
 
-    void saveAll(List<T> objects);
+    void saveAll(List<T> objects) throws ReaderException;
 
     void update(T object) throws ReaderException, UpdateNotPossible, ObjectNotFound;
 
