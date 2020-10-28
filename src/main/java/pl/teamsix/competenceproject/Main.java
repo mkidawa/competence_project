@@ -7,8 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Main implements CommandLineRunner {
 
+    /*------------------------ FIELDS REGION ------------------------*/
+
+    /*------------------------ METHODS REGION ------------------------*/
+
     /**
-     * This is the real Spring boot main method where fg. UI can be started
+     * This is the "real" Spring boot main method where fg. UI can be started.
      */
     @Override
     public void run(String... args) throws Exception {
