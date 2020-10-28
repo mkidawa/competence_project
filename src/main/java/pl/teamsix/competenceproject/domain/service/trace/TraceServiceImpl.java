@@ -39,7 +39,7 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
-    public Trace saveAll(List<Trace> object) {
+    public List<Trace> saveAll(List<Trace> objects) {
         return null;
     }
 }

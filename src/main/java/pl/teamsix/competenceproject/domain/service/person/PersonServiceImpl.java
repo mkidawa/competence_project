@@ -1,9 +1,11 @@
 package pl.teamsix.competenceproject.domain.service.person;
 
 import pl.teamsix.competenceproject.domain.entity.Person;
+import pl.teamsix.competenceproject.domain.exception.PersonNotFound;
 import pl.teamsix.competenceproject.domain.repository.PersonRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PersonServiceImpl implements PersonService {
 
@@ -16,42 +18,59 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person findById(String id) {
-        return null;
+    public Person findById(String id) throws PersonNotFound {
+        Optional<Person> person = personRepository.findById(id);
+
+        if (!person.isPresent()) {
+            throw new PersonNotFound();
+        }
+
+        return person.get();
     }
 
     @Override
-    public List<Person> findAll() {
-        return null;
+    public List<Person> findAll() throws PersonNotFound {
+        List<Person> people = personRepository.findAll();
+
+        if (people == null || people.size() == 0) {
+            throw new PersonNotFound();
+        }
+
+        return people;
     }
 
     @Override
     public Person save(Person object) {
-        return null;
+        return personRepository.save(object);
     }
 
     @Override
-    public Person saveAll(List<Person> object) {
-        return null;
+    public List<Person> saveAll(List<Person> objects) {
+        return personRepository.saveAll(objects);
     }
 
     @Override
     public Person update(Person object) {
-        return null;
+        return personRepository.save(object);
+    }
+
+    @Override
+    public List<Person> updateAll(List<Person> objects) {
+        return personRepository.saveAll(objects);
     }
 
     @Override
     public void deleteById(String id) {
-
+        personRepository.deleteById(id);
     }
 
     @Override
     public void delete(Person object) {
-
+        personRepository.delete(object);
     }
 
     @Override
     public void deleteAll() {
-
+        personRepository.deleteAll();
     }
 }

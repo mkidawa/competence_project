@@ -1,14 +1,16 @@
 package pl.teamsix.competenceproject.domain.service;
 
+import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
+
 import java.util.List;
 
 public interface BaseService<T> {
 
-    T findById(String id);
+    T findById(String id) throws ObjectNotFound;
 
-    List<T> findAll();
+    List<T> findAll() throws ObjectNotFound;
 
     T save(T object);
 
-    T saveAll(List<T> object);
+    List<T> saveAll(List<T> objects);
 }
