@@ -1,5 +1,6 @@
 package pl.teamsix.competenceproject.domain.service.person;
 
+import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Person;
 import pl.teamsix.competenceproject.domain.exception.PersonNotFound;
 import pl.teamsix.competenceproject.domain.repository.PersonRepository;
@@ -7,6 +8,7 @@ import pl.teamsix.competenceproject.domain.repository.PersonRepository;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PersonServiceImpl implements PersonService {
 
     /*------------------------ FIELDS REGION ------------------------*/
@@ -49,11 +51,17 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.saveAll(objects);
     }
 
+    /**
+     * Save method also updates when passed object exists in database.
+     */
     @Override
     public Person update(Person object) {
         return personRepository.save(object);
     }
 
+    /**
+     * SaveAll method also updates when passed object exists in database.
+     */
     @Override
     public List<Person> updateAll(List<Person> objects) {
         return personRepository.saveAll(objects);

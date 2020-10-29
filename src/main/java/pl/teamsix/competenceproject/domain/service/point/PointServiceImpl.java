@@ -1,5 +1,6 @@
 package pl.teamsix.competenceproject.domain.service.point;
 
+import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Point;
 import pl.teamsix.competenceproject.domain.exception.PointNotFound;
 import pl.teamsix.competenceproject.domain.repository.PointRepository;
@@ -7,6 +8,7 @@ import pl.teamsix.competenceproject.domain.repository.PointRepository;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PointServiceImpl implements PointService {
 
     /*------------------------ FIELDS REGION ------------------------*/
@@ -49,11 +51,17 @@ public class PointServiceImpl implements PointService {
         return pointRepository.saveAll(objects);
     }
 
+    /**
+     * Save method also updates when passed object exists in database.
+     */
     @Override
     public Point update(Point object) {
         return pointRepository.save(object);
     }
 
+    /**
+     * SaveAll method also updates when passed object exists in database.
+     */
     @Override
     public List<Point> updateAll(List<Point> objects) {
         return pointRepository.saveAll(objects);
