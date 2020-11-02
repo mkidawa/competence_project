@@ -8,7 +8,7 @@
 #### How To
 * Run `mvn spring-boot:run` or `./mvnw spring-boot:run` or `mvnw.cmd spring-boot:run`
 * Build `mvn clean install` or `./mvnw clean install` or `mvnw.cmd clean install`
-* Checkstyle `mvn checkstyle:checkstyle` or `./mvnw checkstyle:checkstyle` OR `mvnw.cmd checkstyle:checkstyle`
+* Checkstyle `mvn checkstyle:checkstyle` or `./mvnw checkstyle:checkstyle` or `mvnw.cmd checkstyle:checkstyle`
 
 #### Database Setup
 * Remember to check setup in application.properties - setup below is the default one which you get if you run MongoDB installer
