@@ -1,8 +1,8 @@
-package pl.teamsix.competenceproject.domain.service.person;
+package pl.teamsix.competenceproject.domain.service.user;
 
 import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.service.CrudService;
 
-public interface PersonService extends CrudService<User> {
+public interface UserService extends CrudService<User> {
 
 }

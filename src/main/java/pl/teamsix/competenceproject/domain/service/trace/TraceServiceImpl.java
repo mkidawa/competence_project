@@ -7,23 +7,23 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Trace;
 import pl.teamsix.competenceproject.domain.exception.TraceNotFound;
-import pl.teamsix.competenceproject.domain.repository.PersonRepository;
-import pl.teamsix.competenceproject.domain.repository.PointRepository;
+import pl.teamsix.competenceproject.domain.repository.UserRepository;
+import pl.teamsix.competenceproject.domain.repository.HotspotRepository;
 import pl.teamsix.competenceproject.domain.repository.TraceRepository;
 
 @Service
 public class TraceServiceImpl implements TraceService {
 
     /*------------------------ FIELDS REGION ------------------------*/
-    private final PersonRepository personRepository;
-    private final PointRepository pointRepository;
+    private final UserRepository userRepository;
+    private final HotspotRepository hotspotRepository;
     private final TraceRepository traceRepository;
 
     /*------------------------ METHODS REGION ------------------------*/
-    public TraceServiceImpl(PersonRepository personRepository, PointRepository pointRepository,
+    public TraceServiceImpl(UserRepository userRepository, HotspotRepository hotspotRepository,
             TraceRepository traceRepository) {
-        this.personRepository = personRepository;
-        this.pointRepository = pointRepository;
+        this.userRepository = userRepository;
+        this.hotspotRepository = hotspotRepository;
         this.traceRepository = traceRepository;
     }
 
@@ -56,8 +56,8 @@ public class TraceServiceImpl implements TraceService {
      */
     @Override
     public Trace save(Trace object) {
-        personRepository.save(object.getUser());
-        pointRepository.save(object.getHotspot());
+        userRepository.save(object.getUser());
+        hotspotRepository.save(object.getHotspot());
         return traceRepository.save(object);
     }
 
@@ -68,9 +68,9 @@ public class TraceServiceImpl implements TraceService {
      */
     @Override
     public List<Trace> saveAll(List<Trace> objects) {
-        personRepository.saveAll(objects.stream().map((it) -> it.getUser()).collect(Collectors.toList()));
+        userRepository.saveAll(objects.stream().map((it) -> it.getUser()).collect(Collectors.toList()));
 
-        pointRepository.saveAll(objects.stream().map((it) -> it.getHotspot()).collect(Collectors.toList()));
+        hotspotRepository.saveAll(objects.stream().map((it) -> it.getHotspot()).collect(Collectors.toList()));
 
         return traceRepository.saveAll(objects);
     }

@@ -1,27 +1,27 @@
-package pl.teamsix.competenceproject.domain.service.person;
+package pl.teamsix.competenceproject.domain.service.user;
 
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.exception.PersonNotFound;
-import pl.teamsix.competenceproject.domain.repository.PersonRepository;
+import pl.teamsix.competenceproject.domain.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonServiceImpl implements PersonService {
+public class UserServiceImpl implements UserService {
 
     /*------------------------ FIELDS REGION ------------------------*/
-    private final PersonRepository personRepository;
+    private final UserRepository userRepository;
 
     /*------------------------ METHODS REGION ------------------------*/
-    public PersonServiceImpl(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public User findById(String id) throws PersonNotFound {
-        Optional<User> person = personRepository.findById(id);
+        Optional<User> person = userRepository.findById(id);
 
         if (!person.isPresent()) {
             throw new PersonNotFound();
@@ -32,7 +32,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<User> findAll() throws PersonNotFound {
-        List<User> people = personRepository.findAll();
+        List<User> people = userRepository.findAll();
 
         if (people == null || people.size() == 0) {
             throw new PersonNotFound();
@@ -43,12 +43,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public User save(User object) {
-        return personRepository.save(object);
+        return userRepository.save(object);
     }
 
     @Override
     public List<User> saveAll(List<User> objects) {
-        return personRepository.saveAll(objects);
+        return userRepository.saveAll(objects);
     }
 
     /**
@@ -56,7 +56,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public User update(User object) {
-        return personRepository.save(object);
+        return userRepository.save(object);
     }
 
     /**
@@ -64,21 +64,21 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public List<User> updateAll(List<User> objects) {
-        return personRepository.saveAll(objects);
+        return userRepository.saveAll(objects);
     }
 
     @Override
     public void deleteById(String id) {
-        personRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public void delete(User object) {
-        personRepository.delete(object);
+        userRepository.delete(object);
     }
 
     @Override
     public void deleteAll() {
-        personRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

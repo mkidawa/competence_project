@@ -3,8 +3,8 @@ package pl.teamsix.competenceproject;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pl.teamsix.competenceproject.domain.service.person.PersonService;
-import pl.teamsix.competenceproject.domain.service.point.PointService;
+import pl.teamsix.competenceproject.domain.service.user.UserService;
+import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
 import pl.teamsix.competenceproject.domain.service.trace.TraceService;
 
 @SpringBootApplication
@@ -12,15 +12,15 @@ public class Main implements CommandLineRunner {
 
     /*------------------------ FIELDS REGION ------------------------*/
     // TODO THIS IS ONLY FOR SHOW PURPOSES IF NOT NEEDED THEN DELETE
-    private final PersonService personService;
-    private final PointService pointService;
+    private final UserService userService;
+    private final HotspotService hotspotService;
     private final TraceService traceService;
 
     /*------------------------ METHODS REGION ------------------------*/
     // TODO THIS IS ONLY FOR SHOW PURPOSES IF NOT NEEDED THEN DELETE
-    public Main(PersonService personService, PointService pointService, TraceService traceService) {
-        this.personService = personService;
-        this.pointService = pointService;
+    public Main(UserService userService, HotspotService hotspotService, TraceService traceService) {
+        this.userService = userService;
+        this.hotspotService = hotspotService;
         this.traceService = traceService;
     }
 
