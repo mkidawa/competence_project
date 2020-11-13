@@ -1,8 +1,8 @@
 package pl.teamsix.competenceproject.domain.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import pl.teamsix.competenceproject.domain.entity.Person;
+import pl.teamsix.competenceproject.domain.entity.User;
 
-public interface PersonRepository extends MongoRepository<Person, String> {
+public interface PersonRepository extends MongoRepository<User, String> {
 
 }

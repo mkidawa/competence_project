@@ -1,7 +1,7 @@
 package pl.teamsix.competenceproject.domain.service.point;
 
 import org.springframework.stereotype.Service;
-import pl.teamsix.competenceproject.domain.entity.Point;
+import pl.teamsix.competenceproject.domain.entity.Hotspot;
 import pl.teamsix.competenceproject.domain.exception.PointNotFound;
 import pl.teamsix.competenceproject.domain.repository.PointRepository;
 
@@ -20,8 +20,8 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public Point findById(String id) throws PointNotFound {
-        Optional<Point> point = pointRepository.findById(id);
+    public Hotspot findById(String id) throws PointNotFound {
+        Optional<Hotspot> point = pointRepository.findById(id);
 
         if (!point.isPresent()) {
             throw new PointNotFound();
@@ -31,23 +31,23 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public List<Point> findAll() throws PointNotFound {
-        List<Point> points = pointRepository.findAll();
+    public List<Hotspot> findAll() throws PointNotFound {
+        List<Hotspot> hotspots = pointRepository.findAll();
 
-        if (points == null || points.size() == 0) {
+        if (hotspots == null || hotspots.size() == 0) {
             throw new PointNotFound();
         }
 
-        return points;
+        return hotspots;
     }
 
     @Override
-    public Point save(Point object) {
+    public Hotspot save(Hotspot object) {
         return pointRepository.save(object);
     }
 
     @Override
-    public List<Point> saveAll(List<Point> objects) {
+    public List<Hotspot> saveAll(List<Hotspot> objects) {
         return pointRepository.saveAll(objects);
     }
 
@@ -55,7 +55,7 @@ public class PointServiceImpl implements PointService {
      * Save method also updates when passed object exists in database.
      */
     @Override
-    public Point update(Point object) {
+    public Hotspot update(Hotspot object) {
         return pointRepository.save(object);
     }
 
@@ -63,7 +63,7 @@ public class PointServiceImpl implements PointService {
      * SaveAll method also updates when passed object exists in database.
      */
     @Override
-    public List<Point> updateAll(List<Point> objects) {
+    public List<Hotspot> updateAll(List<Hotspot> objects) {
         return pointRepository.saveAll(objects);
     }
 
@@ -73,7 +73,7 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public void delete(Point object) {
+    public void delete(Hotspot object) {
         pointRepository.delete(object);
     }
 

@@ -1,7 +1,7 @@
 package pl.teamsix.competenceproject.domain.service.person;
 
 import org.springframework.stereotype.Service;
-import pl.teamsix.competenceproject.domain.entity.Person;
+import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.exception.PersonNotFound;
 import pl.teamsix.competenceproject.domain.repository.PersonRepository;
 
@@ -20,8 +20,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person findById(String id) throws PersonNotFound {
-        Optional<Person> person = personRepository.findById(id);
+    public User findById(String id) throws PersonNotFound {
+        Optional<User> person = personRepository.findById(id);
 
         if (!person.isPresent()) {
             throw new PersonNotFound();
@@ -31,8 +31,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> findAll() throws PersonNotFound {
-        List<Person> people = personRepository.findAll();
+    public List<User> findAll() throws PersonNotFound {
+        List<User> people = personRepository.findAll();
 
         if (people == null || people.size() == 0) {
             throw new PersonNotFound();
@@ -42,12 +42,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person save(Person object) {
+    public User save(User object) {
         return personRepository.save(object);
     }
 
     @Override
-    public List<Person> saveAll(List<Person> objects) {
+    public List<User> saveAll(List<User> objects) {
         return personRepository.saveAll(objects);
     }
 
@@ -55,7 +55,7 @@ public class PersonServiceImpl implements PersonService {
      * Save method also updates when passed object exists in database.
      */
     @Override
-    public Person update(Person object) {
+    public User update(User object) {
         return personRepository.save(object);
     }
 
@@ -63,7 +63,7 @@ public class PersonServiceImpl implements PersonService {
      * SaveAll method also updates when passed object exists in database.
      */
     @Override
-    public List<Person> updateAll(List<Person> objects) {
+    public List<User> updateAll(List<User> objects) {
         return personRepository.saveAll(objects);
     }
 
@@ -73,7 +73,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void delete(Person object) {
+    public void delete(User object) {
         personRepository.delete(object);
     }
 
