@@ -1,0 +1,13 @@
+Institude
+Faculty
+library
+sports Hall
+printery
+canteen
+court
+administration
+dean's office
+center
+post
+dormitory
+green space
