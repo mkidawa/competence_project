@@ -17,6 +17,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.lang.Double.parseDouble;
+
 @Service
 public class HotspotsGenerator {
 
@@ -25,7 +27,7 @@ public class HotspotsGenerator {
     private ContinuousDistribution.Sampler sampler;
     private final RestorableUniformRandomProvider rand;
     private  HotspotService hotspotService;
-    List<String> hotspotList;
+    List<String> hotspotList; //in format (name, outdoor probability)
     List<String> facilitiesList;
 
     public HotspotsGenerator(final HotspotService hotspotService) {
@@ -57,13 +59,25 @@ public class HotspotsGenerator {
         final Hotspot hotspot = new Hotspot();
         generateHotspotPosition(hotspot);
         //generating hotspot
-        //TODO attach it to constructor
         Random rand = new Random();
         String hotspotName;
-        if(rand.nextDouble() > 0.5)
-            hotspotName = hotspotList.get(rand.nextInt(2)) + " of " + facilitiesList.get(rand.nextInt(facilitiesList.size()));
-        else hotspotName = hotspotList.get(rand.nextInt(hotspotList.size()-2)+2);
-
+        String type;
+        if(rand.nextDouble() > 0.5){
+            String [] segments = hotspotList.get(rand.nextInt(2)).split(",");
+            hotspotName = segments[0] + " of " + facilitiesList.get(rand.nextInt(facilitiesList.size()));
+            if(rand.nextDouble() < parseDouble(segments[1]) || segments[1]=="1")
+                type = "outdoor";
+            else type = "indoor";
+        }
+        else {
+            String [] segments = hotspotList.get(rand.nextInt(hotspotList.size() - 2) + 2).split(",");
+            hotspotName = segments[0];
+            if(rand.nextDouble() < parseDouble(segments[1]) || segments[1]=="1")
+                type = "outdoor";
+            else type = "indoor";
+        }
+        hotspot.setName(hotspotName);
+        hotspot.setType(type);
 
         return hotspot;
     }

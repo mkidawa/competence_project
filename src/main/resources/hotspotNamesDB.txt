@@ -1,13 +1,12 @@
-Institude
-Faculty
-library
-sports Hall
-printery
-canteen
-court
-administration
-dean's office
-center
-post
-dormitory
-green space
+Institude,0
+Faculty,0
+library,0
+sports hall,0.2
+printery,0
+canteen,0.1
+court,0.5
+administration,0
+dean's office,0
+post,0
+dormitory,0
+green space,1
