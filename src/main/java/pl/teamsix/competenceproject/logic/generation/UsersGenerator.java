@@ -56,7 +56,7 @@ public class UsersGenerator {
         //getting profession and age
         String profile;
         int age;
-        String segments[] =  profileList.get(rand.nextInt(profileList.size())).split(",");
+        String[] segments =  profileList.get(rand.nextInt(profileList.size())).split(",");
         profile = segments[0];
         age = rand.nextInt(parseInt(segments[2])-parseInt(segments[1]))+parseInt(segments[1])+1;
         //getting hobby/hobbies - up to 3
