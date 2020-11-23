@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Hotspot;
 import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -19,13 +25,17 @@ public class HotspotsGenerator {
     private ContinuousDistribution.Sampler sampler;
     private final RestorableUniformRandomProvider rand;
     private  HotspotService hotspotService;
+    List<String> hotspotList;
+    List<String> facilitiesList;
 
     public HotspotsGenerator(final HotspotService hotspotService) {
         this.rand = RandomSource.create(RandomSource.MT);
         this.sampler = new GammaDistribution(1,2).createSampler(rand);
         this.maxDistance = 5000;
         this.hotspotService = hotspotService;
+        loadAllLists();
     }
+
 
     public void setMaxDistance(double maxDistance) {
         this.maxDistance = maxDistance;
@@ -46,7 +56,15 @@ public class HotspotsGenerator {
     private Hotspot generateSingleHotspot() {
         final Hotspot hotspot = new Hotspot();
         generateHotspotPosition(hotspot);
-        //TODO Ola - generate all field values except coordinates
+        //generating hotspot
+        //TODO attach it to constructor
+        Random rand = new Random();
+        String hotspotName;
+        if(rand.nextDouble() > 0.5)
+            hotspotName = hotspotList.get(rand.nextInt(2)) + " of " + facilitiesList.get(rand.nextInt(facilitiesList.size()));
+        else hotspotName = hotspotList.get(rand.nextInt(hotspotList.size()-2)+2);
+
+
         return hotspot;
     }
 
@@ -58,5 +76,24 @@ public class HotspotsGenerator {
         while(distance>this.maxDistance);
         hotspot.setX(distance*Math.cos(angle));
         hotspot.setY(distance*Math.sin(angle));
+    }
+
+    public void loadAllLists() {
+        hotspotList = readFromSimpleFile("src/main/resources/hotspotNamesDB.txt");
+        facilitiesList = readFromSimpleFile("src/main/resources/facultiesDB.txt");
+    }
+    public List readFromSimpleFile(String filePath) {
+        ArrayList<String> arr = new ArrayList<String>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
+        {
+            String sCurrentLine;
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                arr.add(sCurrentLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return arr;
     }
 }
