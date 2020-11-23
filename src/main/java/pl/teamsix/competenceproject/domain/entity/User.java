@@ -3,11 +3,10 @@ package pl.teamsix.competenceproject.domain.entity;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.UUID;
+//import java.util.UUID;
 
 @Document
 public class User extends BaseEntity {
-    private String id;
     private String firstName;
     private String lastName;
     private int age;
@@ -18,7 +17,7 @@ public class User extends BaseEntity {
 
 
     public User(String firstName, String lastName, int age, char gender, ArrayList interests, String profile, String phoneNumber) {
-        id = UUID.randomUUID().toString();
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -31,7 +30,7 @@ public class User extends BaseEntity {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "id='" + getId() + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
@@ -64,11 +63,6 @@ public class User extends BaseEntity {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    @Override
-    public String getId() {
-        return id;
     }
 
     public char getGender() {
