@@ -2,38 +2,41 @@ package pl.teamsix.competenceproject.domain.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 @Document
 public class User extends BaseEntity {
+    private String id;
     private String firstName;
     private String lastName;
     private int age;
-    private String gender;
-    private String interest;
+    private char gender; // 'F' or 'M'
+    private ArrayList interests;
     private String profile;
     private String phoneNumber;
 
 
-    public User() {
-
-    }
-
-    public User(String firstName, String lastName, int age, String gender, String interest, String profile, String phoneNumber) {
+    public User(String firstName, String lastName, int age, char gender, ArrayList interests, String profile, String phoneNumber) {
+        id = UUID.randomUUID().toString();
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.gender = gender;
-        this.interest = interest;
+        this.interests = interests;
         this.profile = profile;
         this.phoneNumber = phoneNumber;
     }
+
     @Override
     public String toString() {
         return "User{" +
-                "firstName='" + firstName + '\'' +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
-                ", gender='" + gender + '\'' +
-                ", interest='" + interest + '\'' +
+                ", gender=" + gender +
+                ", interests=" + interests +
                 ", profile='" + profile + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
@@ -63,20 +66,25 @@ public class User extends BaseEntity {
         this.age = age;
     }
 
-    public String getGender() {
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    public char getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(char gender) {
         this.gender = gender;
     }
 
-    public String getInterest() {
-        return interest;
+    public ArrayList getInterests() {
+        return interests;
     }
 
-    public void setInterest(String interest) {
-        this.interest = interest;
+    public void setInterests(ArrayList interest) {
+        this.interests = interest;
     }
 
     public String getProfile() {
