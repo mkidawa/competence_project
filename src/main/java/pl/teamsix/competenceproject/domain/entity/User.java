@@ -1,8 +1,8 @@
 package pl.teamsix.competenceproject.domain.entity;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 //import java.util.UUID;
 
 @Document
@@ -15,8 +15,8 @@ public class User extends BaseEntity {
     private String profile;
     private String phoneNumber;
 
-
-    public User(String firstName, String lastName, int age, char gender, ArrayList interests, String profile, String phoneNumber) {
+    public User(String firstName, String lastName, int age, char gender, ArrayList interests, String profile,
+            String phoneNumber) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,16 +29,9 @@ public class User extends BaseEntity {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + getId() + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", gender=" + gender +
-                ", interests=" + interests +
-                ", profile='" + profile + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+        return "User{" + "id='" + getId() + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
+                + ", age=" + age + ", gender=" + gender + ", interests=" + interests + ", profile='" + profile + '\''
+                + ", phoneNumber='" + phoneNumber + '\'' + '}';
     }
 
     public String getFirstName() {

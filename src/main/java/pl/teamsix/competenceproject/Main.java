@@ -3,9 +3,9 @@ package pl.teamsix.competenceproject;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pl.teamsix.competenceproject.domain.service.user.UserService;
 import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
 import pl.teamsix.competenceproject.domain.service.trace.TraceService;
+import pl.teamsix.competenceproject.domain.service.user.UserService;
 
 @SpringBootApplication
 public class Main implements CommandLineRunner {

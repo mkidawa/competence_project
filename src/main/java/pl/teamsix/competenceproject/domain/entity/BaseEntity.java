@@ -1,12 +1,12 @@
 package pl.teamsix.competenceproject.domain.entity;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.Id;
-
-import java.io.Serializable;
-import java.util.UUID;
 
 public class BaseEntity implements Serializable {
 
@@ -39,22 +39,16 @@ public class BaseEntity implements Serializable {
 
         BaseEntity that = (BaseEntity) o;
 
-        return new EqualsBuilder()
-                .append(id, that.id)
-                .isEquals();
+        return new EqualsBuilder().append(id, that.id).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).toHashCode();
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .toString();
+        return new ToStringBuilder(this).append("id", id).toString();
     }
 }

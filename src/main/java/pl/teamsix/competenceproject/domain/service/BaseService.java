@@ -1,8 +1,8 @@
 package pl.teamsix.competenceproject.domain.service;
 
-import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
-
 import java.util.List;
+
+import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
 
 public interface BaseService<T> {
 

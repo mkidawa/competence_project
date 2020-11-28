@@ -1,12 +1,12 @@
 package pl.teamsix.competenceproject.domain.service.hotspot;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Hotspot;
 import pl.teamsix.competenceproject.domain.exception.PointNotFound;
 import pl.teamsix.competenceproject.domain.repository.HotspotRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HotspotServiceImpl implements HotspotService {

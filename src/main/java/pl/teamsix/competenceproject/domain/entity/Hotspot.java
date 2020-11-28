@@ -39,13 +39,8 @@ public class Hotspot extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Hotspot{" +
-                "id" + getId() +
-                "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", x=" + x +
-                ", y=" + y +
-                '}';
+        return "Hotspot{" + "id" + getId() + "name='" + name + '\'' + ", type='" + type + '\'' + ", x=" + x + ", y=" + y
+                + '}';
     }
 
     public double getX() {
