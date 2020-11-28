@@ -1,0 +1,8 @@
+profesor,28,100
+student,18,33
+doctoral student,25,35
+office worker,20,100
+janitor,20,100
+dean,50,100
+unemployed,18,100
+other,18,100

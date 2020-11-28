@@ -6,12 +6,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class BaseEntity implements Serializable {
 
     /*------------------------ FIELDS REGION ------------------------*/
     @Id
     private String id;
+
+    public BaseEntity() {
+        id = UUID.randomUUID().toString();
+    }
 
     /*------------------------ METHODS REGION ------------------------*/
     public String getId() {
