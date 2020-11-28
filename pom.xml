@@ -42,7 +42,21 @@
                 </exclusion>
             </exclusions>
         </dependency>
-    </dependencies>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math4</artifactId>
+            <version>4.0-SNAPSHOT</version>
+        </dependency>
+</dependencies>
+
+    <repositories>
+        <repository>
+            <id>apache</id>
+            <name>apache_snapshots</name>
+            <url>http://repository.apache.org/snapshots</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
