@@ -15,13 +15,9 @@ import pl.teamsix.competenceproject.domain.service.trace.TraceService;
 public class TracesGenerator {
 
     private static final int BATCH_SIZE = 1000;
-
-    /* average movements per millisecond - 1 per hour */
-    private static final double LAMBDA = 1.0 / 3600000.0;
+    private static final int MILLISECONDS_IN_HOUR = 3600000;
 
     private final List<Trace> traces = new ArrayList<>();
-    private final ExponentialDistribution timeDistribution = new ExponentialDistribution(1.0 / LAMBDA);
-    private final ExponentialDistribution hotspotsDistribution = new ExponentialDistribution(1.0 / 6.0);
 
     private final TraceService traceService;
 
@@ -29,7 +25,12 @@ public class TracesGenerator {
         this.traceService = traceService;
     }
 
-    public void generate(List<User> users, List<Hotspot> hotspots, long duration, LocalDateTime startTime) {
+    public void generate(List<User> users, List<Hotspot> hotspots, LocalDateTime startTime, double durationInHours,
+            double avgMovementsPerHour) {
+        long duration = (long) (durationInHours * MILLISECONDS_IN_HOUR);
+        double lambda = avgMovementsPerHour / MILLISECONDS_IN_HOUR;
+        final ExponentialDistribution timeDistribution = new ExponentialDistribution(1.0 / lambda);
+        final ExponentialDistribution hotspotsDistribution = new ExponentialDistribution(1.0 / 6.0);
         for (User user : users) {
             double time = timeDistribution.sample();
             while (time < duration) {
