@@ -20,8 +20,8 @@ public class TracesGenerator {
     private static final double LAMBDA = 1.0 / 3600000.0;
 
     private final List<Trace> traces = new ArrayList<>();
-    private final ExponentialDistribution timeDistribution = new ExponentialDistribution(LAMBDA);
-    private final ExponentialDistribution hotspotsDistribution = new ExponentialDistribution(6.0);
+    private final ExponentialDistribution timeDistribution = new ExponentialDistribution(1.0 / LAMBDA);
+    private final ExponentialDistribution hotspotsDistribution = new ExponentialDistribution(1.0 / 6.0);
 
     private final TraceService traceService;
 
