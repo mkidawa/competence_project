@@ -14,11 +14,11 @@ public class BaseEntity implements Serializable {
     @Id
     private String id;
 
+    /*------------------------ METHODS REGION ------------------------*/
     public BaseEntity() {
         id = UUID.randomUUID().toString();
     }
 
-    /*------------------------ METHODS REGION ------------------------*/
     public String getId() {
         return id;
     }
@@ -39,16 +39,22 @@ public class BaseEntity implements Serializable {
 
         BaseEntity that = (BaseEntity) o;
 
-        return new EqualsBuilder().append(id, that.id).isEquals();
+        return new EqualsBuilder()
+                .append(id, that.id)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).toHashCode();
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .toHashCode();
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", id).toString();
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .toString();
     }
 }
