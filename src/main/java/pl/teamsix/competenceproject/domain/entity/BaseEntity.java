@@ -1,12 +1,12 @@
 package pl.teamsix.competenceproject.domain.entity;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.Id;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 public class BaseEntity implements Serializable {
 

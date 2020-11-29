@@ -1,12 +1,12 @@
 package pl.teamsix.competenceproject.domain.entity;
 
-import java.time.LocalDateTime;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Document
 public class Trace extends BaseEntity {

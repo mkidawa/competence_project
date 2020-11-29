@@ -1,11 +1,11 @@
 package pl.teamsix.competenceproject.domain.entity;
 
-import java.util.ArrayList;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 
 @Document
 public class User extends BaseEntity {

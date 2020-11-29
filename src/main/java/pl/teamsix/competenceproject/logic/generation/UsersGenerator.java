@@ -1,6 +1,8 @@
 package pl.teamsix.competenceproject.logic.generation;
 
-import static java.lang.Integer.parseInt;
+import org.springframework.stereotype.Service;
+import pl.teamsix.competenceproject.domain.entity.User;
+import pl.teamsix.competenceproject.domain.service.user.UserService;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,9 +13,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.springframework.stereotype.Service;
-import pl.teamsix.competenceproject.domain.entity.User;
-import pl.teamsix.competenceproject.domain.service.user.UserService;
+import static java.lang.Integer.parseInt;
 
 @Service
 public class UsersGenerator {

@@ -1,12 +1,12 @@
 package pl.teamsix.competenceproject.domain.service.user;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.exception.PersonNotFound;
 import pl.teamsix.competenceproject.domain.repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {

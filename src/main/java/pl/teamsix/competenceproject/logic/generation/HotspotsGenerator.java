@@ -1,6 +1,12 @@
 package pl.teamsix.competenceproject.logic.generation;
 
-import static java.lang.Double.parseDouble;
+import org.apache.commons.rng.RestorableUniformRandomProvider;
+import org.apache.commons.rng.simple.RandomSource;
+import org.apache.commons.statistics.distribution.ContinuousDistribution;
+import org.apache.commons.statistics.distribution.GammaDistribution;
+import org.springframework.stereotype.Service;
+import pl.teamsix.competenceproject.domain.entity.Hotspot;
+import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,13 +17,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.apache.commons.rng.RestorableUniformRandomProvider;
-import org.apache.commons.rng.simple.RandomSource;
-import org.apache.commons.statistics.distribution.ContinuousDistribution;
-import org.apache.commons.statistics.distribution.GammaDistribution;
-import org.springframework.stereotype.Service;
-import pl.teamsix.competenceproject.domain.entity.Hotspot;
-import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
+import static java.lang.Double.parseDouble;
 
 @Service
 public class HotspotsGenerator {

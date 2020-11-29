@@ -1,14 +1,14 @@
 package pl.teamsix.competenceproject.domain.service.trace;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Trace;
 import pl.teamsix.competenceproject.domain.exception.TraceNotFound;
 import pl.teamsix.competenceproject.domain.repository.HotspotRepository;
 import pl.teamsix.competenceproject.domain.repository.TraceRepository;
 import pl.teamsix.competenceproject.domain.repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TraceServiceImpl implements TraceService {

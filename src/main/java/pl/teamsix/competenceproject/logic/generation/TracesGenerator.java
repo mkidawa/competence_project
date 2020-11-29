@@ -1,15 +1,15 @@
 package pl.teamsix.competenceproject.logic.generation;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Hotspot;
 import pl.teamsix.competenceproject.domain.entity.Trace;
 import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.service.trace.TraceService;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TracesGenerator {
