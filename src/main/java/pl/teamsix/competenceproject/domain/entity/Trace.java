@@ -11,52 +11,37 @@ import java.time.LocalDateTime;
 @Document
 public class Trace extends BaseEntity {
 
-    /*------------------------ FIELDS REGION ------------------------*/
     @DBRef
-    private Person person;
+    private final User user;
+
     @DBRef
-    private Point point;
-    private LocalDateTime timeOfEntry;
-    private LocalDateTime timeOfExit;
+    private final Hotspot hotspot;
 
-    /*------------------------ METHODS REGION ------------------------*/
-    public Trace(Person person, Point point, LocalDateTime timeOfEntry, LocalDateTime timeOfExit) {
-        this.person = person;
-        this.point = point;
-        this.timeOfEntry = timeOfEntry;
-        this.timeOfExit = timeOfExit;
+    private final LocalDateTime entryTime;
+    private final LocalDateTime exitTime;
+
+    public Trace(final User user, final Hotspot hotspot,
+                 final LocalDateTime entryTime, final LocalDateTime exitTime) {
+        this.user = user;
+        this.hotspot = hotspot;
+        this.entryTime = entryTime;
+        this.exitTime = exitTime;
     }
 
-    public Person getPerson() {
-        return person;
+    public User getUser() {
+        return user;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public Hotspot getHotspot() {
+        return hotspot;
     }
 
-    public Point getPoint() {
-        return point;
+    public LocalDateTime getEntryTime() {
+        return entryTime;
     }
 
-    public void setPoint(Point point) {
-        this.point = point;
-    }
-
-    public LocalDateTime getTimeOfEntry() {
-        return timeOfEntry;
-    }
-
-    public void setTimeOfEntry(LocalDateTime timeOfEntry) {
-        this.timeOfEntry = timeOfEntry;
-    }
-
-    public LocalDateTime getTimeOfExit() {
-        return timeOfExit;
-    }
-
-    public void setTimeOfExit(LocalDateTime timeOfExit) {
-        this.timeOfExit = timeOfExit;
+    public LocalDateTime getExitTime() {
+        return exitTime;
     }
 
     @Override
@@ -73,10 +58,10 @@ public class Trace extends BaseEntity {
 
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
-                .append(person, trace.person)
-                .append(point, trace.point)
-                .append(timeOfEntry, trace.timeOfEntry)
-                .append(timeOfExit, trace.timeOfExit)
+                .append(user, trace.user)
+                .append(hotspot, trace.hotspot)
+                .append(entryTime, trace.entryTime)
+                .append(exitTime, trace.exitTime)
                 .isEquals();
     }
 
@@ -84,10 +69,10 @@ public class Trace extends BaseEntity {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .appendSuper(super.hashCode())
-                .append(person)
-                .append(point)
-                .append(timeOfEntry)
-                .append(timeOfExit)
+                .append(user)
+                .append(hotspot)
+                .append(entryTime)
+                .append(exitTime)
                 .toHashCode();
     }
 
@@ -95,10 +80,10 @@ public class Trace extends BaseEntity {
     public String toString() {
         return new ToStringBuilder(this)
                 .appendSuper(super.toString())
-                .append("person", person)
-                .append("point", point)
-                .append("timeOfEntry", timeOfEntry)
-                .append("timeOfExit", timeOfExit)
+                .append("user", user)
+                .append("hotspot", hotspot)
+                .append("entryTime", entryTime)
+                .append("exitTime", exitTime)
                 .toString();
     }
 }

@@ -3,25 +3,34 @@ package pl.teamsix.competenceproject;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pl.teamsix.competenceproject.domain.service.person.PersonService;
-import pl.teamsix.competenceproject.domain.service.point.PointService;
+import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
 import pl.teamsix.competenceproject.domain.service.trace.TraceService;
+import pl.teamsix.competenceproject.domain.service.user.UserService;
+import pl.teamsix.competenceproject.logic.generation.HotspotsGenerator;
+import pl.teamsix.competenceproject.logic.generation.TracesGenerator;
+import pl.teamsix.competenceproject.logic.generation.UsersGenerator;
 
 @SpringBootApplication
 public class Main implements CommandLineRunner {
 
     /*------------------------ FIELDS REGION ------------------------*/
-    // TODO THIS IS ONLY FOR SHOW PURPOSES IF NOT NEEDED THEN DELETE
-    private final PersonService personService;
-    private final PointService pointService;
+    private final UserService userService;
+    private final HotspotService hotspotService;
     private final TraceService traceService;
+    private final UsersGenerator usersGenerator;
+    private final HotspotsGenerator hotspotsGenerator;
+    private final TracesGenerator tracesGenerator;
 
     /*------------------------ METHODS REGION ------------------------*/
-    // TODO THIS IS ONLY FOR SHOW PURPOSES IF NOT NEEDED THEN DELETE
-    public Main(PersonService personService, PointService pointService, TraceService traceService) {
-        this.personService = personService;
-        this.pointService = pointService;
+    public Main(UserService userService, HotspotService hotspotService,
+                TraceService traceService, UsersGenerator usersGenerator,
+                HotspotsGenerator hotspotsGenerator, TracesGenerator tracesGenerator) {
+        this.userService = userService;
+        this.hotspotService = hotspotService;
         this.traceService = traceService;
+        this.usersGenerator = usersGenerator;
+        this.hotspotsGenerator = hotspotsGenerator;
+        this.tracesGenerator = tracesGenerator;
     }
 
     /**
