@@ -40,7 +40,7 @@ public class Main implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // TODO DELETE BELOW CODE, THIS IS ONLY FOR SHOW PURPOSES
         System.out.println("---------------------------------");
-        System.out.println("SAMPLE TEXT TO DELETE");
+        System.out.println(this.hotspotService.findAll().size());
         System.out.println("---------------------------------");
     }
 
