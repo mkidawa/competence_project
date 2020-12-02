@@ -8,7 +8,7 @@ import org.apache.spark.sql.SparkSession;
 import org.springframework.stereotype.Service;
 import scala.collection.Seq;
 
-import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.*;
 
 /*
 
@@ -19,6 +19,22 @@ ReadConfig readConfig = ReadConfig.create(jsc).withOptions(readOverrides);
 
 // Read another table 2 (details table )
 JavaMongoRDD<Document> detailsRdd = MongoSpark.load(jsc, readConfig);
+ */
+/* trace schema
+root
+ |-- _class: string (nullable = true)
+ |-- _id: struct (nullable = true)
+ |    |-- oid: string (nullable = true)
+ |-- entryTime: timestamp (nullable = true)
+ |-- exitTime: timestamp (nullable = true)
+ |-- hotspot: struct (nullable = true)
+ |    |-- $ref: string (nullable = true)
+ |    |-- $id: struct (nullable = true)
+ |    |    |-- oid: string (nullable = true)
+ |-- user: struct (nullable = true)
+ |    |-- $ref: string (nullable = true)
+ |    |-- $id: struct (nullable = true)
+ |    |    |-- oid: string (nullable = true)
  */
 @Service
 public class DataAnalysis {
@@ -43,8 +59,13 @@ public class DataAnalysis {
     public void rankByTimeSpentInHotspot(){
         JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
         Dataset<Row> df = MongoSpark.load(jsc).toDF();
-        Dataset<Row> result =  df.groupBy("hotspot").sum((Seq<String>) org.apache.spark.sql.functions.datediff(col("exitTime"),col("entryTime")));
-
+        Dataset<Row> xd =  df.select(col("hotspot"),col("exitTime").cast("long").minus(col("entryTime").cast("long")).as("xd"),to_timestamp(col("exitTime")).minus(to_timestamp(col("entryTime"))).as("timeSpent"));
+        xd.sort(col("xd").desc()).show(30);
+        //xd.show(200);
+        System.out.println(xd.count());
+        Dataset<Row> times =  df.select(col("hotspot"),col("exitTime").cast("long").minus(col("entryTime").cast("long")).divide(60).as("timeSpent"));
+        //Dataset<Row> result = times.groupBy("hotspot").agg(sum(col("timeSpent")),avg(col("timeSpent")),max(col("timeSpent")));
+        Dataset<Row> result = times.groupBy("hotspot").agg(round(sum(col("timeSpent")),2),round(avg(col("timeSpent")),2),round(max(col("timeSpent")),2));
         result.show();
 
     }
