@@ -6,7 +6,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Document
 public class Trace extends BaseEntity {
@@ -17,11 +18,11 @@ public class Trace extends BaseEntity {
     @DBRef
     private final Hotspot hotspot;
 
-    private final LocalDateTime entryTime;
-    private final LocalDateTime exitTime;
+    private final Date entryTime;
+    private final Date exitTime;
 
     public Trace(final User user, final Hotspot hotspot,
-                 final LocalDateTime entryTime, final LocalDateTime exitTime) {
+                 final Date entryTime, final Date exitTime) {
         this.user = user;
         this.hotspot = hotspot;
         this.entryTime = entryTime;
@@ -36,11 +37,11 @@ public class Trace extends BaseEntity {
         return hotspot;
     }
 
-    public LocalDateTime getEntryTime() {
+    public Date getEntryTime() {
         return entryTime;
     }
 
-    public LocalDateTime getExitTime() {
+    public Date getExitTime() {
         return exitTime;
     }
 

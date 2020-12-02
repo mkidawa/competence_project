@@ -7,6 +7,8 @@ import pl.teamsix.competenceproject.domain.entity.Trace;
 import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.service.trace.TraceService;
 
+//import java.time.LocalDateTime;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class TracesGenerator {
         this.traceService = traceService;
     }
 
-    public void generate(List<User> users, List<Hotspot> hotspots, LocalDateTime startTime, double durationInHours,
+    public void generate(List<User> users, List<Hotspot> hotspots, Date startTime, double durationInHours,
             double avgMovementsPerHour) {
         long duration = (long) (durationInHours * MILLISECONDS_IN_HOUR);
         double lambda = avgMovementsPerHour / MILLISECONDS_IN_HOUR;
@@ -46,7 +48,7 @@ public class TracesGenerator {
         }
     }
 
-    private void generateSingleTrace(User user, Hotspot hotspot, LocalDateTime entryTime, LocalDateTime exitTime) {
+    private void generateSingleTrace(User user, Hotspot hotspot, Date entryTime, Date exitTime) {
         traces.add(new Trace(user, hotspot, entryTime, exitTime));
         if (traces.size() == BATCH_SIZE) {
             traceService.saveAll(traces);
@@ -54,7 +56,10 @@ public class TracesGenerator {
         }
     }
 
-    private LocalDateTime toLocalDateTime(double time, LocalDateTime startTime) {
-        return startTime.plusSeconds((long) time / 1000);
+    private Date toLocalDateTime(double time, Date startTime) {
+        //return startTime.plusSeconds((long) time / 1000);
+        Date date = new Date(startTime.getTime());
+        date.setTime(date.getTime() +((long) time / 1000));
+        return date;
     }
 }
