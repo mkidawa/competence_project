@@ -1,6 +1,7 @@
 package pl.teamsix.competenceproject.logic.generation;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
+import org.apache.spark.sql.types.LongType;
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Hotspot;
 import pl.teamsix.competenceproject.domain.entity.Trace;
@@ -59,7 +60,7 @@ public class TracesGenerator {
     private Date toLocalDateTime(double time, Date startTime) {
         //return startTime.plusSeconds((long) time / 1000);
         Date date = new Date(startTime.getTime());
-        date.setTime(date.getTime() +((long) time / 1000));
+        date.setTime(date.getTime() +((long) time));
         return date;
     }
 }
