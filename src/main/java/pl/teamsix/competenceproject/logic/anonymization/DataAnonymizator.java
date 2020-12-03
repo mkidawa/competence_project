@@ -53,7 +53,10 @@ public class DataAnonymizator {
         do {
             randomUser = usersGenerator.generateSingleUser();
         } while (user.getFirstName().equals(randomUser.getFirstName())
-                || user.getLastName().equals(randomUser.getLastName()));
+                || user.getLastName().equals(randomUser.getLastName())
+                || user.getAge() == randomUser.getAge()
+                || user.getProfile().equals(randomUser.getProfile())
+                || user.getPhoneNumber().equals(randomUser.getPhoneNumber()));
 
         user.setFirstName(randomUser.getFirstName());
         user.setLastName(randomUser.getLastName());
