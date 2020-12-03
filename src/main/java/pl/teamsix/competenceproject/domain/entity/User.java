@@ -14,9 +14,9 @@ public class User extends UserBackup {
     private String hashedId;
 
     /*------------------------ METHODS REGION ------------------------*/
-    public User(String lastName, String firstName, int age, char gender,
-                ArrayList interests, String profile, String phoneNumber) {
-        super(lastName, firstName, age, gender, interests, profile, phoneNumber);
+    public User(String firstName, String lastName, int age, char gender, ArrayList interests,
+                String profile, String phoneNumber) {
+        super(firstName, lastName, age, gender, interests, profile, phoneNumber);
     }
 
     public String getHashedId() {

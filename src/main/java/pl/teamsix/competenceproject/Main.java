@@ -7,6 +7,7 @@ import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
 import pl.teamsix.competenceproject.domain.service.trace.TraceService;
 import pl.teamsix.competenceproject.domain.service.user.UserBackupService;
 import pl.teamsix.competenceproject.domain.service.user.UserService;
+import pl.teamsix.competenceproject.logic.analysis.DataAnalysis;
 import pl.teamsix.competenceproject.logic.anonymization.DataAnonymizator;
 import pl.teamsix.competenceproject.logic.generation.HotspotsGenerator;
 import pl.teamsix.competenceproject.logic.generation.TracesGenerator;
@@ -24,12 +25,14 @@ public class Main implements CommandLineRunner {
     private final HotspotsGenerator hotspotsGenerator;
     private final TracesGenerator tracesGenerator;
     private final DataAnonymizator dataAnonymizator;
+    private final DataAnalysis dataAnalysis;
 
     /*------------------------ METHODS REGION ------------------------*/
     public Main(UserService userService, UserBackupService userBackupService,
                 HotspotService hotspotService, TraceService traceService,
                 UsersGenerator usersGenerator, HotspotsGenerator hotspotsGenerator,
-                TracesGenerator tracesGenerator, DataAnonymizator dataAnonymizator) {
+                TracesGenerator tracesGenerator, DataAnonymizator dataAnonymizator,
+                DataAnalysis dataAnalysis) {
         this.userService = userService;
         this.userBackupService = userBackupService;
         this.hotspotService = hotspotService;
@@ -38,6 +41,7 @@ public class Main implements CommandLineRunner {
         this.hotspotsGenerator = hotspotsGenerator;
         this.tracesGenerator = tracesGenerator;
         this.dataAnonymizator = dataAnonymizator;
+        this.dataAnalysis = dataAnalysis;
     }
 
     /**
@@ -47,7 +51,7 @@ public class Main implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // TODO DELETE BELOW CODE, THIS IS ONLY FOR SHOW PURPOSES
         System.out.println("---------------------------------");
-//        System.out.println(this.hotspotService.findAll().size());
+        System.out.println(this.hotspotService.findAll().size());
         System.out.println("---------------------------------");
     }
 

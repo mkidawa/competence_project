@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class UserBackup extends BaseEntity {
 
     /*------------------------ FIELDS REGION ------------------------*/
-    private String lastName;
     private String firstName;
+    private String lastName;
     private int age;
     private char gender; // 'F' or 'M'
     private ArrayList interests;
@@ -20,10 +20,10 @@ public class UserBackup extends BaseEntity {
     private String phoneNumber;
 
     /*------------------------ METHODS REGION ------------------------*/
-    public UserBackup(String lastName, String firstName, int age, char gender,
+    public UserBackup(String firstName, String lastName, int age, char gender,
                       ArrayList interests, String profile, String phoneNumber) {
-        this.lastName = lastName;
         this.firstName = firstName;
+        this.lastName = lastName;
         this.age = age;
         this.gender = gender;
         this.interests = interests;
@@ -100,39 +100,42 @@ public class UserBackup extends BaseEntity {
         UserBackup that = (UserBackup) o;
 
         return new EqualsBuilder()
+                .appendSuper(super.equals(o))
                 .append(age, that.age)
                 .append(gender, that.gender)
+                .append(firstName, that.firstName)
                 .append(lastName, that.lastName)
                 .append(interests, that.interests)
                 .append(profile, that.profile)
                 .append(phoneNumber, that.phoneNumber)
-                .append(firstName, that.firstName)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode())
+                .append(firstName)
                 .append(lastName)
                 .append(age)
                 .append(gender)
                 .append(interests)
                 .append(profile)
                 .append(phoneNumber)
-                .append(firstName)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("firstName", firstName)
                 .append("lastName", lastName)
                 .append("age", age)
                 .append("gender", gender)
                 .append("interests", interests)
                 .append("profile", profile)
                 .append("phoneNumber", phoneNumber)
-                .append("firstName", firstName)
                 .toString();
     }
 }
