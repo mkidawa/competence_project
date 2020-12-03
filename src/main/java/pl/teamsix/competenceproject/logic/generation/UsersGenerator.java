@@ -44,7 +44,7 @@ public class UsersGenerator {
         }
     }
 
-    private User generateSingleUser() {
+    public User generateSingleUser() {
         Random rand = new Random();
         //getting first name
         String firstName = firstNamesList.get(rand.nextInt(firstNamesList.size()));
@@ -58,11 +58,10 @@ public class UsersGenerator {
             gender = 'M';
         }
         //getting profession and age
-        String profile;
-        int age;
         String[] segments = profileList.get(rand.nextInt(profileList.size())).split(",");
-        profile = segments[0];
-        age = rand.nextInt(parseInt(segments[2]) - parseInt(segments[1])) + parseInt(segments[1]) + 1;
+        String profile = segments[0];
+        int age = rand.nextInt(
+                parseInt(segments[2]) - parseInt(segments[1])) + parseInt(segments[1]) + 1;
         //getting hobby/hobbies - up to 3
         int noOfHobbies = rand.nextInt(3) + 1;
         ArrayList interests = new ArrayList();
@@ -72,9 +71,7 @@ public class UsersGenerator {
         //creating phone number - american format
         String phoneNumber = "+1" + (rand.nextInt(800) + 200) + (rand.nextInt(9000000) + 1000000);
 
-        final User user = new User(firstName, lastName, age,
-                gender, interests, profile, phoneNumber);
-        return user;
+        return new User(firstName, lastName, age, gender, interests, profile, phoneNumber);
     }
 
     public void loadAllLists() {
