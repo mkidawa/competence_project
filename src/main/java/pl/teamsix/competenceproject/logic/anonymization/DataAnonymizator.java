@@ -1,15 +1,14 @@
 package pl.teamsix.competenceproject.logic.anonymization;
 
-import com.google.common.hash.Hashing;
 import org.springframework.stereotype.Component;
 import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.entity.UserBackup;
 import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
 import pl.teamsix.competenceproject.domain.service.user.UserBackupService;
 import pl.teamsix.competenceproject.domain.service.user.UserService;
+import pl.teamsix.competenceproject.logic.HashingProvider;
 import pl.teamsix.competenceproject.logic.generation.UsersGenerator;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Component
@@ -48,9 +47,7 @@ public class DataAnonymizator {
     }
 
     private void changeUserProperties(User user, UserBackup userBackup) {
-        user.setHashedId(Hashing.sha256().hashString(
-                userBackup.getId(), StandardCharsets.UTF_8
-        ).toString());
+        user.setHashedId(HashingProvider.hashString(userBackup.getId()));
 
         User randomUser = null;
         do {

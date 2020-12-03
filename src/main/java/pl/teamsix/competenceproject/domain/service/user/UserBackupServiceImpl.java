@@ -1,10 +1,12 @@
 package pl.teamsix.competenceproject.domain.service.user;
 
 import org.springframework.stereotype.Service;
+import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.entity.UserBackup;
 import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
-import pl.teamsix.competenceproject.domain.exception.PersonNotFound;
+import pl.teamsix.competenceproject.domain.exception.UserNotFound;
 import pl.teamsix.competenceproject.domain.repository.UserBackupRepository;
+import pl.teamsix.competenceproject.logic.HashingProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +16,13 @@ public class UserBackupServiceImpl implements UserBackupService {
 
     /*------------------------ FIELDS REGION ------------------------*/
     private final UserBackupRepository userBackupRepository;
+    private final UserService userService;
 
     /*------------------------ METHODS REGION ------------------------*/
-    public UserBackupServiceImpl(UserBackupRepository userBackupRepository) {
+    public UserBackupServiceImpl(UserBackupRepository userBackupRepository,
+                                 UserService userService) {
         this.userBackupRepository = userBackupRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -25,7 +30,7 @@ public class UserBackupServiceImpl implements UserBackupService {
         Optional<UserBackup> userBackup = userBackupRepository.findById(id);
 
         if (!userBackup.isPresent()) {
-            throw new PersonNotFound();
+            throw new UserNotFound();
         }
 
         return userBackup.get();
@@ -36,7 +41,7 @@ public class UserBackupServiceImpl implements UserBackupService {
         List<UserBackup> userBackups = userBackupRepository.findAll();
 
         if (userBackups == null || userBackups.size() == 0) {
-            throw new PersonNotFound();
+            throw new UserNotFound();
         }
 
         return userBackups;
@@ -81,5 +86,15 @@ public class UserBackupServiceImpl implements UserBackupService {
     @Override
     public void deleteAll() {
         userBackupRepository.deleteAll();
+    }
+
+    @Override
+    public User findFakeUser(String id) throws ObjectNotFound {
+        String hashedId = HashingProvider.hashString(id);
+
+        return userService.findAll()
+                .stream()
+                .filter((user) -> user.getHashedId().equals(hashedId))
+                .findFirst().orElseThrow(UserNotFound::new);
     }
 }
