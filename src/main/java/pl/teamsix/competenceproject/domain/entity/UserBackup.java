@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 
-@Document
+@Document("user-backup")
 public class UserBackup extends BaseEntity {
 
     /*------------------------ FIELDS REGION ------------------------*/
