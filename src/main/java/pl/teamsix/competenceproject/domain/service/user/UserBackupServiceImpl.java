@@ -95,6 +95,7 @@ public class UserBackupServiceImpl implements UserBackupService {
         return userService.findAll()
                 .stream()
                 .filter((user) -> user.getHashedId().equals(hashedId))
-                .findFirst().orElseThrow(UserNotFound::new);
+                .findFirst()
+                .orElseThrow(UserNotFound::new);
     }
 }
