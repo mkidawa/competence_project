@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 //import java.time.LocalDateTime;
-import java.sql.Date;
+import java.util.Date;
 
 @Document
 public class Trace extends BaseEntity {
