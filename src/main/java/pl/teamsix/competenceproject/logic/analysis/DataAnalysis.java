@@ -22,19 +22,19 @@ JavaMongoRDD<Document> detailsRdd = MongoSpark.load(jsc, readConfig);
  */
 /* trace schema
 root
- |-- _class: string (nullable = true)
  |-- _id: struct (nullable = true)
  |    |-- oid: string (nullable = true)
- |-- entryTime: timestamp (nullable = true)
- |-- exitTime: timestamp (nullable = true)
- |-- hotspot: struct (nullable = true)
- |    |-- $ref: string (nullable = true)
- |    |-- $id: struct (nullable = true)
- |    |    |-- oid: string (nullable = true)
  |-- user: struct (nullable = true)
  |    |-- $ref: string (nullable = true)
  |    |-- $id: struct (nullable = true)
  |    |    |-- oid: string (nullable = true)
+ |-- hotspot: struct (nullable = true)
+ |    |-- $ref: string (nullable = true)
+ |    |-- $id: struct (nullable = true)
+ |    |    |-- oid: string (nullable = true)
+ |-- entryTime: timestamp (nullable = true)
+ |-- exitTime: timestamp (nullable = true)
+ |-- _class: string (nullable = true)
  */
 @Service
 public class DataAnalysis {
@@ -54,7 +54,8 @@ public class DataAnalysis {
                                 .sort(col("count")
                                     .desc()
                                     );
-        result.show();
+        result.show(false);
+        System.out.println("rankByUsersInHotspot");
     }
     public void rankByTimeSpentInHotspot(){
         JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
@@ -66,8 +67,46 @@ public class DataAnalysis {
         Dataset<Row> times =  df.select(col("hotspot"),col("exitTime").cast("long").minus(col("entryTime").cast("long")).divide(60).as("timeSpent"));
         //Dataset<Row> result = times.groupBy("hotspot").agg(sum(col("timeSpent")),avg(col("timeSpent")),max(col("timeSpent")));
         Dataset<Row> result = times.groupBy("hotspot").agg(round(sum(col("timeSpent")),2),round(avg(col("timeSpent")),2),round(max(col("timeSpent")),2));
-        result.show();
+        result.show(false);
+        System.out.println("rankByTimeSpentInHotspot");
+    }
 
+    public void rankByFrequentUsers(){
+        JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
+        Dataset<Row> df = MongoSpark.load(jsc).toDF();
+        Dataset<Row> frequency =  df
+                .groupBy("hotspot", "user")
+                .count()
+                .sort(col("count")
+                        .desc()
+                )
+                .groupBy("hotspot").agg(first("user"), max("count").as("maximum"))
+                .sort(
+                        col("maximum").desc()
+                );
+        frequency.show(false);
+        System.out.println("rankByFrequentUsers");
+    }
+
+    public void userTimeSpentInHotspot(){
+        JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
+        Dataset<Row> df = MongoSpark.load(jsc).toDF();
+        Dataset<Row> times =  df
+                .select(
+                        col("user"),
+                        col("hotspot"),
+                        col("exitTime").cast("long")
+                                .minus(col("entryTime").cast("long"))
+                                .divide(60).as("timeSpent"))
+
+                    .groupBy("user", "hotspot")
+                    .agg(
+                            round(sum(col("timeSpent")),2),
+                            round(avg(col("timeSpent")), 2),
+                            round(max(col("timeSpent")),2)
+                    );
+        times.show(false);
+        System.out.println("userTimeSpentInHotspot");
     }
 
 }
