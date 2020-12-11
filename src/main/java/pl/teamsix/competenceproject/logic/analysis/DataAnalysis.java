@@ -139,4 +139,34 @@ public class DataAnalysis {
         jsc.close();
         System.out.println("numberOfUsersByHours");
     }
+
+    public void numberOfUsersByWeekDay(){
+        JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
+        Dataset<Row> df = MongoSpark.load(jsc).toDF();
+        Dataset<Row> temp =  df
+                .select(
+                        col("hotspot")
+                        ,when(dayofweek(col("entryTime")).equalTo(1),1).otherwise(0).as("entered1")
+                        ,when(dayofweek(col("entryTime")).equalTo(2),1).otherwise(0).as("entered2")
+                        ,when(dayofweek(col("entryTime")).equalTo(3),1).otherwise(0).as("entered3")
+                        ,when(dayofweek(col("entryTime")).equalTo(4),1).otherwise(0).as("entered4")
+                        ,when(dayofweek(col("entryTime")).equalTo(5),1).otherwise(0).as("entered5")
+                        ,when(dayofweek(col("entryTime")).equalTo(6),1).otherwise(0).as("entered6")
+                        ,when(dayofweek(col("entryTime")).equalTo(7),1).otherwise(0).as("entered7")
+
+                )
+                .groupBy("hotspot")
+                .agg(
+                        sum("entered2").as("People in Monday"),
+                        sum("entered3").as("People in Tuesday"),
+                        sum("entered4").as("People in Wednesday"),
+                        sum("entered5").as("People in Thursday"),
+                        sum("entered6").as("People in Friday"),
+                        sum("entered7").as("People in Saturday"),
+                        sum("entered1").as("People in Sunday")
+                        );
+
+        temp.show(200,false);
+        System.out.println("numberOfUsersByWeekDay");
+    }
 }
