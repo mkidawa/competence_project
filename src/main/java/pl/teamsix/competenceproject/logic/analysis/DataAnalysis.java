@@ -2,6 +2,7 @@ package pl.teamsix.competenceproject.logic.analysis;
 
 import com.mongodb.spark.MongoSpark;
 import com.mongodb.spark.config.ReadConfig;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.scheduler.IndirectTaskResult;
@@ -11,10 +12,8 @@ import org.apache.spark.sql.SparkSession;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.functions.*;
 
@@ -287,6 +286,60 @@ public class DataAnalysis {
             System.out.println("longestRoute");
         }
         jsc.close();
+    }
+
+    public Map<String,Integer> mostPopularNextHotspot() {
+
+        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+        Dataset<Row> tempTrace = MongoSpark.load(jsc).toDF()
+                .select(
+                        col("user.$id.oid").as("user"),
+                        col("hotspot.$id.oid").as("hotspot"),
+                        col("entryTime")
+                ).sort(
+                        col("user"),
+                        col("entryTime").asc()
+                );
+        Map<String, String> readOverrides = new HashMap<>();
+        readOverrides.put("collection", "user");
+        ReadConfig readConfig = ReadConfig.create(jsc).withOptions(readOverrides);
+        Dataset<Row> tempHotspot = MongoSpark.load(jsc, readConfig).toDF()
+                .select(
+                        col("_id.oid")
+                ).limit(5);
+        String id;
+        List<Row> userTrace,
+                list = tempHotspot.collectAsList();
+        Dataset<Row> set;
+        HashMap<String,Integer> allUsersTraces = new HashMap<>();
+        List<String> userTraces = new ArrayList<>();
+
+        for(Row row : list){
+            id = row.get(0).toString();
+            set = tempTrace
+                    .select("hotspot")
+                    .where("user = '" + id + "'");
+            userTrace = set.collectAsList();
+
+            for(int i = 0; i < userTrace.size()-1; i++){
+                userTraces.add(
+                                userTrace.get(i).get(0).toString()+ "," +
+                                userTrace.get(i+1).get(0).toString());
+            }
+            userTraces.forEach(a -> allUsersTraces.merge(a,1,Integer::sum));
+            userTraces.clear();
+        }
+
+        Map<String,Integer> result = allUsersTraces.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new)
+                );
+        jsc.close();
+        return result;
     }
 
     static class RowRecord implements Serializable {
