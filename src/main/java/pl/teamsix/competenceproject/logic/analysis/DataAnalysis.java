@@ -6,9 +6,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.clustering.KMeans;
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.feature.VectorAssembler;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -336,6 +334,43 @@ public class DataAnalysis {
         return model.transform(dataset);
     }
 
+    public Dataset<Row> clusterByDayTime(int k, JavaSparkContext jsc){
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"0"})
+                .setOutputCol("features");
+        Dataset<Row> data = numberOfUsersByHours(jsc).na().drop().agg(
+                sum(col("People in between 0-2")).as("People in between 0-2"),
+                sum(col("People in between 2-4")).as("People in between 2-4"),
+                sum(col("People in between 4-6")).as("People in between 4-6"),
+                sum(col("People in between 6-8")).as("People in between 6-8"),
+                sum(col("People in between 8-10")).as("People in between 8-10"),
+                sum(col("People in between 10-12")).as("People in between 10-12"),
+                sum(col("People in between 12-14")).as("People in between 12-14"),
+                sum(col("People in between 14-16")).as("People in between 14-16"),
+                sum(col("People in between 16-18")).as("People in between 16-18"),
+                sum(col("People in between 18-20")).as("People in between 18-20"),
+                sum(col("People in between 20-22")).as("People in between 20-22"),
+                sum(col("People in between 22-24")).as("People in between 22-24")
+        ).withColumn("time",lit(0));
+        Column[] cols = Arrays
+                .stream(data.columns())
+                .filter(x -> ! x.equals("time"))
+                .map(n -> struct(lit(n).alias("c"), col(n).alias("v")))
+                .toArray(Column[]::new);
+
+        Dataset<Row> exploded_df = data.select( col("time"), explode(array(cols)))
+                .groupBy(col("col.c"))
+                .pivot("time")
+                .agg(first(col("col.v")))
+                .orderBy("c");
+
+        Dataset<Row> dataset = assembler.transform(exploded_df).select(col("c").as("times"),col("features"));
+
+        KMeans kMeans = new KMeans().setK(k).setSeed(1L);
+        KMeansModel model = kMeans.fit(dataset);
+
+        return model.transform(dataset);
+    }
 
     static class RowRecord implements Serializable {
         String userId;
