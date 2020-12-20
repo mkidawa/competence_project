@@ -2,18 +2,14 @@ package pl.teamsix.competenceproject.logic.analysis;
 
 import com.mongodb.spark.MongoSpark;
 import com.mongodb.spark.config.ReadConfig;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.ml.clustering.KMeans;
+import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.feature.VectorAssembler;
-import org.apache.spark.scheduler.IndirectTaskResult;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.springframework.stereotype.Service;
-import org.apache.spark.ml.clustering.KMeans;
-import org.apache.spark.ml.clustering.KMeansModel;
-import org.apache.spark.ml.evaluation.ClusteringEvaluator;
 
 import java.io.Serializable;
 import java.util.*;
@@ -49,15 +45,9 @@ root
  */
 @Service
 public class DataAnalysis {
-    private SparkSession sparkTrace = SparkSession.builder()
-            .master("local")
-            .appName("appname")
-            .config("spark.mongodb.input.uri", "mongodb://localhost:27017/competence_project_name.trace")
-            .config("spark.mongodb.output.uri", "mongodb://localhost:27017/competence_project_name.trace")
-            .getOrCreate();
 
-    public Dataset<Row> rankByUsersInHotspot(){
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public Dataset<Row> rankByUsersInHotspot(JavaSparkContext jsc){
+
         return MongoSpark.load(jsc).toDF()
                 .groupBy("hotspot")
                 .count()
@@ -66,8 +56,7 @@ public class DataAnalysis {
                 );
     }
 
-    public Dataset<Row> rankByTimeSpentInHotspot() {
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public Dataset<Row> rankByTimeSpentInHotspot(JavaSparkContext jsc) {
         return  MongoSpark.load(jsc).toDF()
          .select(
                 col("hotspot"),
@@ -82,8 +71,7 @@ public class DataAnalysis {
             );
     }
 
-    public Dataset<Row> rankByFrequentUsers() {
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public Dataset<Row> rankByFrequentUsers(JavaSparkContext jsc) {
         return MongoSpark.load(jsc).toDF()
                 .groupBy("hotspot", "user")
                 .count()
@@ -98,8 +86,7 @@ public class DataAnalysis {
                 );
     }
 
-    public Dataset<Row> userTimeSpentInHotspot(){
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public Dataset<Row> userTimeSpentInHotspot(JavaSparkContext jsc){
         return MongoSpark.load(jsc).toDF()
                 .select(
                         col("user"),
@@ -116,8 +103,7 @@ public class DataAnalysis {
                 );
     }
 
-    public Dataset<Row> numberOfUsersByHours() {
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public Dataset<Row> numberOfUsersByHours(JavaSparkContext jsc) {
         return MongoSpark.load(jsc).toDF()
                 .select(
                         col("hotspot"),
@@ -175,8 +161,7 @@ public class DataAnalysis {
                 );
     }
 
-    public Dataset<Row> numberOfUsersByWeekDay(){
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public Dataset<Row> numberOfUsersByWeekDay(JavaSparkContext jsc){
         return MongoSpark.load(jsc).toDF()
                 .select(
                 col("hotspot")
@@ -201,9 +186,7 @@ public class DataAnalysis {
                 );
     }
 
-    public List<RowRecord> longestRoute(){
-
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public List<RowRecord> longestRoute(JavaSparkContext jsc){
         Dataset<Row> tempTrace = MongoSpark.load(jsc).toDF()
             .select(
                     col("user.$id.oid").as("user"),
@@ -254,9 +237,7 @@ public class DataAnalysis {
         return records;
     }
 
-    public Map<String,Integer> mostPopularNextHotspot() {
-
-        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+    public Map<String,Integer> mostPopularNextHotspot(JavaSparkContext jsc) {
         Dataset<Row> tempTrace = MongoSpark.load(jsc).toDF()
                 .select(
                         col("user.$id.oid").as("user"),
@@ -307,11 +288,11 @@ public class DataAnalysis {
         return result;
     }
 
-    public Dataset<Row> clusterByUsers(int k){
+    public Dataset<Row> clusterByUsers(int k, JavaSparkContext jsc){
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"count"})
                 .setOutputCol("features");
-        Dataset<Row> dataset = assembler.transform(rankByUsersInHotspot().na().drop()).select("hotspot","features");
+        Dataset<Row> dataset = assembler.transform(rankByUsersInHotspot(jsc).na().drop()).select("hotspot","features");
 
         KMeans kMeans = new KMeans().setK(k).setSeed(1L);
         KMeansModel model = kMeans.fit(dataset);
@@ -319,22 +300,23 @@ public class DataAnalysis {
         return model.transform(dataset);
     }
 
-    public Dataset<Row> clusterByTimeSpent(int k){
+    public Dataset<Row> clusterByTimeSpent(int k, JavaSparkContext jsc){
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"round(sum(timeSpent), 2)","round(avg(timeSpent), 2)","round(max(timeSpent), 2)"})
                 .setOutputCol("features");
-        Dataset<Row> dataset = assembler.transform(rankByTimeSpentInHotspot().na().drop()).select("hotspot","features");
+        Dataset<Row> dataset = assembler.transform(rankByTimeSpentInHotspot(jsc).na().drop()).select("hotspot","features");
 
         KMeans kMeans = new KMeans().setK(k).setSeed(1L);
         KMeansModel model = kMeans.fit(dataset);
 
         return model.transform(dataset);
     }
-    public Dataset<Row> clusterByFrequentUser(int k){
+
+    public Dataset<Row> clusterByFrequentUser(int k, JavaSparkContext jsc){
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"maximum"})
                 .setOutputCol("features");
-        Dataset<Row> dataset = assembler.transform(rankByFrequentUsers().na().drop()).select("hotspot","features");
+        Dataset<Row> dataset = assembler.transform(rankByFrequentUsers(jsc).na().drop()).select("hotspot","features");
 
         KMeans kMeans = new KMeans().setK(k).setSeed(1L);
         KMeansModel model = kMeans.fit(dataset);
@@ -342,11 +324,11 @@ public class DataAnalysis {
         return model.transform(dataset);
     }
 
-    public Dataset<Row> clusterByUsersInWeekDay(int k){
+    public Dataset<Row> clusterByUsersInWeekDay(int k, JavaSparkContext jsc){
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"People in Monday", "People in Tuesday","People in Wednesday","People in Thursday","People in Friday","People in Saturday","People in Sunday"})
                 .setOutputCol("features");
-        Dataset<Row> dataset = assembler.transform(numberOfUsersByWeekDay().na().drop()).select("hotspot","features");
+        Dataset<Row> dataset = assembler.transform(numberOfUsersByWeekDay(jsc).na().drop()).select("hotspot","features");
 
         KMeans kMeans = new KMeans().setK(k).setSeed(1L);
         KMeansModel model = kMeans.fit(dataset);
