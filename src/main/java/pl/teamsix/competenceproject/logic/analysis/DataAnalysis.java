@@ -52,7 +52,7 @@ public class DataAnalysis {
             .config("spark.mongodb.output.uri", "mongodb://localhost:27017/competence_project_name.trace")
             .getOrCreate();
 
-    public void rankByUsersInHotspot(){
+    public Dataset<Row> rankByUsersInHotspot(){
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         Dataset<Row> df = MongoSpark.load(jsc).toDF();
         Dataset<Row> result = df
@@ -61,12 +61,11 @@ public class DataAnalysis {
                 .sort(col("count")
                         .desc()
                 );
-        result.show(false);
         jsc.close();
-        System.out.println("rankByUsersInHotspot");
+        return result;
     }
 
-    public void rankByTimeSpentInHotspot() {
+    public Dataset<Row> rankByTimeSpentInHotspot() {
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         Dataset<Row> df = MongoSpark.load(jsc).toDF();
         Dataset<Row> xd =  df.select(
@@ -92,12 +91,11 @@ public class DataAnalysis {
                         round(avg(col("timeSpent")), 2),
                         round(max(col("timeSpent")), 2)
                 );
-        result.show(false);
         jsc.close();
-        System.out.println("rankByTimeSpentInHotspot");
+        return result;
     }
 
-    public void rankByFrequentUsers() {
+    public Dataset<Row> rankByFrequentUsers() {
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         Dataset<Row> df = MongoSpark.load(jsc).toDF();
         Dataset<Row> frequency = df
@@ -112,12 +110,11 @@ public class DataAnalysis {
                 .sort(
                         col("maximum").desc()
                 );
-        frequency.show(false);
         jsc.close();
-        System.out.println("rankByFrequentUsers");
+        return frequency;
     }
 
-    public void userTimeSpentInHotspot(){
+    public Dataset<Row> userTimeSpentInHotspot(){
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         Dataset<Row> df = MongoSpark.load(jsc).toDF();
         Dataset<Row> times = df
@@ -134,12 +131,11 @@ public class DataAnalysis {
                         round(avg(col("timeSpent")), 2),
                         round(max(col("timeSpent")), 2)
                 );
-        times.show(false);
         jsc.close();
-        System.out.println("userTimeSpentInHotspot");
+        return times;
     }
 
-    public void numberOfUsersByHours() {
+    public Dataset<Row> numberOfUsersByHours() {
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         Dataset<Row> temp = MongoSpark.load(jsc).toDF()
                 .select(
@@ -197,12 +193,11 @@ public class DataAnalysis {
                         sum("entered11").as("People in between 22-24")
                 );
 
-        temp.show(200, false);
         jsc.close();
-        System.out.println("numberOfUsersByHours");
+        return temp;
     }
 
-    public void numberOfUsersByWeekDay(){
+    public Dataset<Row> numberOfUsersByWeekDay(){
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         Dataset<Row> temp = MongoSpark.load(jsc).toDF()
                 .select(
@@ -227,11 +222,12 @@ public class DataAnalysis {
                         sum("entered1").as("People in Sunday")
                 );
 
-        temp.show(200,false);
-        System.out.println("numberOfUsersByWeekDay");
+        jsc.close();
+        return temp;
+
     }
 
-    public void longestRoute(){
+    public List<RowRecord> longestRoute(){
 
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         Dataset<Row> tempTrace = MongoSpark.load(jsc).toDF()
@@ -286,6 +282,7 @@ public class DataAnalysis {
             System.out.println("longestRoute");
         }
         jsc.close();
+        return records;
     }
 
     public Map<String,Integer> mostPopularNextHotspot() {
