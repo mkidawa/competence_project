@@ -1,5 +1,8 @@
 package pl.teamsix.competenceproject;
 
+
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.SparkSession;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +12,7 @@ import pl.teamsix.competenceproject.domain.service.user.UserBackupService;
 import pl.teamsix.competenceproject.domain.service.user.UserService;
 import pl.teamsix.competenceproject.logic.analysis.DataAnalysis;
 import pl.teamsix.competenceproject.logic.anonymization.DataAnonymizator;
+
 import pl.teamsix.competenceproject.logic.generation.HotspotsGenerator;
 import pl.teamsix.competenceproject.logic.generation.TracesGenerator;
 import pl.teamsix.competenceproject.logic.generation.UsersGenerator;
@@ -49,10 +53,22 @@ public class Main implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
-        // TODO DELETE BELOW CODE, THIS IS ONLY FOR SHOW PURPOSES
-        System.out.println("---------------------------------");
-        System.out.println(this.hotspotService.findAll().size());
-        System.out.println("---------------------------------");
+
+        SparkSession sparkTrace = SparkSession.builder()
+                .master("local")
+                .appName("appname")
+                .config("spark.mongodb.input.uri", "mongodb://localhost:27017/competence_project_name.trace")
+                .config("spark.mongodb.output.uri", "mongodb://localhost:27017/competence_project_name.trace")
+                .getOrCreate();
+        JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+//        this.dataAnalysis.rankByUsersInHotspot(jsc).show(200, false);
+//        this.dataAnalysis.rankByTimeSpentInHotspot(jsc).show(200, false);
+//        this.dataAnalysis.userTimeSpentInHotspot(jsc).show(200, false);
+//        this.dataAnalysis.rankByFrequentUsers(jsc).show(200, false);
+//        this.dataAnalysis.numberOfUsersByHours(jsc).show(200, false);
+//        System.out.println(this.dataAnalysis.longestRoute(jsc));
+        this.dataAnalysis.numberOfUsersByHours(jsc).show(200, false);
+        jsc.close();
     }
 
     public static void main(String[] args) {
