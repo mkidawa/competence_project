@@ -1,6 +1,6 @@
 package pl.teamsix.competenceproject.domain.exception;
 
-public class PointNotFound extends ObjectNotFound {
+public class UserNotFound extends ObjectNotFound {
 
     /*------------------------ FIELDS REGION ------------------------*/
 

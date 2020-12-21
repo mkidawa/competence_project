@@ -7,17 +7,16 @@ import org.apache.commons.statistics.distribution.GammaDistribution;
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Hotspot;
 import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
+import pl.teamsix.competenceproject.logic.FileReader;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.lang.Double.parseDouble;
+import static pl.teamsix.competenceproject.logic.Constants.FACULTIES_DB_TXT;
+import static pl.teamsix.competenceproject.logic.Constants.HOTSPOT_NAMES_DB_TXT;
 
 @Service
 public class HotspotsGenerator {
@@ -29,6 +28,7 @@ public class HotspotsGenerator {
     private HotspotService hotspotService;
     List<String> hotspotList; //in format (name, outdoor probability)
     List<String> facilitiesList;
+    private final FileReader fileReader = new FileReader();
 
     public HotspotsGenerator(final HotspotService hotspotService) {
         this.rand = RandomSource.create(RandomSource.MT);
@@ -49,7 +49,8 @@ public class HotspotsGenerator {
     public void generate(int quantity) {
         for (int i = 0; i < quantity; i += BATCH_SIZE) {
             hotspotService.saveAll(
-                    IntStream.range(0, Math.min(quantity - i, BATCH_SIZE)).mapToObj(x -> generateSingleHotspot())
+                    IntStream.range(0, Math.min(quantity - i, BATCH_SIZE))
+                            .mapToObj(x -> generateSingleHotspot())
                             .collect(Collectors.toList()));
         }
     }
@@ -63,14 +64,16 @@ public class HotspotsGenerator {
         String type;
         if (rand.nextDouble() > 0.5) {
             String[] segments = hotspotList.get(rand.nextInt(2)).split(",");
-            hotspotName = segments[0] + " of " + facilitiesList.get(rand.nextInt(facilitiesList.size()));
+            hotspotName =
+                    segments[0] + " of " + facilitiesList.get(rand.nextInt(facilitiesList.size()));
             if (rand.nextDouble() < parseDouble(segments[1]) || segments[1] == "1") {
                 type = "outdoor";
             } else {
                 type = "indoor";
             }
         } else {
-            String[] segments = hotspotList.get(rand.nextInt(hotspotList.size() - 2) + 2).split(",");
+            String[] segments = hotspotList.get(rand.nextInt(hotspotList.size() - 2) + 2)
+                    .split(",");
             hotspotName = segments[0];
             if (rand.nextDouble() < parseDouble(segments[1]) || segments[1] == "1") {
                 type = "outdoor";
@@ -95,21 +98,7 @@ public class HotspotsGenerator {
     }
 
     public void loadAllLists() {
-        hotspotList = readFromSimpleFile("src/main/resources/hotspotNamesDB.txt");
-        facilitiesList = readFromSimpleFile("src/main/resources/facultiesDB.txt");
-    }
-
-    public List readFromSimpleFile(String filePath) {
-        ArrayList<String> arr = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String sCurrentLine;
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                arr.add(sCurrentLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return arr;
+        hotspotList = fileReader.readFromSimpleFile(HOTSPOT_NAMES_DB_TXT);
+        facilitiesList = fileReader.readFromSimpleFile(FACULTIES_DB_TXT);
     }
 }

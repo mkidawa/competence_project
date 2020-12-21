@@ -2,7 +2,7 @@ package pl.teamsix.competenceproject.domain.service.hotspot;
 
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Hotspot;
-import pl.teamsix.competenceproject.domain.exception.PointNotFound;
+import pl.teamsix.competenceproject.domain.exception.HotspotNotFound;
 import pl.teamsix.competenceproject.domain.repository.HotspotRepository;
 
 import java.util.List;
@@ -20,22 +20,22 @@ public class HotspotServiceImpl implements HotspotService {
     }
 
     @Override
-    public Hotspot findById(String id) throws PointNotFound {
+    public Hotspot findById(String id) throws HotspotNotFound {
         Optional<Hotspot> point = hotspotRepository.findById(id);
 
         if (!point.isPresent()) {
-            throw new PointNotFound();
+            throw new HotspotNotFound();
         }
 
         return point.get();
     }
 
     @Override
-    public List<Hotspot> findAll() throws PointNotFound {
+    public List<Hotspot> findAll() throws HotspotNotFound {
         List<Hotspot> hotspots = hotspotRepository.findAll();
 
         if (hotspots == null || hotspots.size() == 0) {
-            throw new PointNotFound();
+            throw new HotspotNotFound();
         }
 
         return hotspots;
