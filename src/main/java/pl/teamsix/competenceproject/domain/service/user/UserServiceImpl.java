@@ -2,7 +2,7 @@ package pl.teamsix.competenceproject.domain.service.user;
 
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.User;
-import pl.teamsix.competenceproject.domain.exception.PersonNotFound;
+import pl.teamsix.competenceproject.domain.exception.UserNotFound;
 import pl.teamsix.competenceproject.domain.repository.UserRepository;
 
 import java.util.List;
@@ -20,22 +20,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(String id) throws PersonNotFound {
+    public User findById(String id) throws UserNotFound {
         Optional<User> person = userRepository.findById(id);
 
         if (!person.isPresent()) {
-            throw new PersonNotFound();
+            throw new UserNotFound();
         }
 
         return person.get();
     }
 
     @Override
-    public List<User> findAll() throws PersonNotFound {
+    public List<User> findAll() throws UserNotFound {
         List<User> people = userRepository.findAll();
 
         if (people == null || people.size() == 0) {
-            throw new PersonNotFound();
+            throw new UserNotFound();
         }
 
         return people;

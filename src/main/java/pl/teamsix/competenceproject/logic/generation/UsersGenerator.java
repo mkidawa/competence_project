@@ -3,10 +3,8 @@ package pl.teamsix.competenceproject.logic.generation;
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.User;
 import pl.teamsix.competenceproject.domain.service.user.UserService;
+import pl.teamsix.competenceproject.logic.FileReader;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +12,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.lang.Integer.parseInt;
+import static pl.teamsix.competenceproject.logic.Constants.FIRST_NAMES_DB_TXT;
+import static pl.teamsix.competenceproject.logic.Constants.HOBBIES_DB_TXT;
+import static pl.teamsix.competenceproject.logic.Constants.LAST_NAMES_DB_TXT;
+import static pl.teamsix.competenceproject.logic.Constants.PROFESSION_DB_TXT;
 
 @Service
 public class UsersGenerator {
@@ -22,6 +24,7 @@ public class UsersGenerator {
 
     private final UserService userService;
 
+    private final FileReader fileReader = new FileReader();
     private List<String> firstNamesList;
     private List<String> lastNamesList;
     private List<String> hobbiesList;
@@ -35,12 +38,13 @@ public class UsersGenerator {
     public void generate(int quantity) {
         for (int i = 0; i < quantity; i += BATCH_SIZE) {
             userService.saveAll(
-                    IntStream.range(0, Math.min(quantity - i, BATCH_SIZE)).mapToObj(x -> generateSingleUser())
+                    IntStream.range(0, Math.min(quantity - i, BATCH_SIZE))
+                            .mapToObj(x -> generateSingleUser())
                             .collect(Collectors.toList()));
         }
     }
 
-    private User generateSingleUser() {
+    public User generateSingleUser() {
         Random rand = new Random();
         //getting first name
         String firstName = firstNamesList.get(rand.nextInt(firstNamesList.size()));
@@ -54,11 +58,10 @@ public class UsersGenerator {
             gender = 'M';
         }
         //getting profession and age
-        String profile;
-        int age;
         String[] segments = profileList.get(rand.nextInt(profileList.size())).split(",");
-        profile = segments[0];
-        age = rand.nextInt(parseInt(segments[2]) - parseInt(segments[1])) + parseInt(segments[1]) + 1;
+        String profile = segments[0];
+        int age = rand.nextInt(
+                parseInt(segments[2]) - parseInt(segments[1])) + parseInt(segments[1]) + 1;
         //getting hobby/hobbies - up to 3
         int noOfHobbies = rand.nextInt(3) + 1;
         ArrayList interests = new ArrayList();
@@ -68,30 +71,13 @@ public class UsersGenerator {
         //creating phone number - american format
         String phoneNumber = "+1" + (rand.nextInt(800) + 200) + (rand.nextInt(9000000) + 1000000);
 
-        final User user = new User(firstName, lastName, age, gender, interests, profile, phoneNumber);
-        return user;
+        return new User(firstName, lastName, age, gender, interests, profile, phoneNumber);
     }
 
     public void loadAllLists() {
-        firstNamesList = readFromSimpleFile("src/main/resources/firstNamesDB.txt");
-        lastNamesList = readFromSimpleFile("src/main/resources/lastNamesDB.txt");
-        hobbiesList = readFromSimpleFile("src/main/resources/hobbiesDB.txt");
-        profileList = readFromSimpleFile("src/main/resources/professionDB.txt");
-        ;
-
-    }
-
-    public List readFromSimpleFile(String filePath) {
-        ArrayList<String> arr = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String sCurrentLine;
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                arr.add(sCurrentLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return arr;
+        firstNamesList = fileReader.readFromSimpleFile(FIRST_NAMES_DB_TXT);
+        lastNamesList = fileReader.readFromSimpleFile(LAST_NAMES_DB_TXT);
+        hobbiesList = fileReader.readFromSimpleFile(HOBBIES_DB_TXT);
+        profileList = fileReader.readFromSimpleFile(PROFESSION_DB_TXT);
     }
 }
