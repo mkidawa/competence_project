@@ -10,6 +10,8 @@ public interface BaseService<T> {
 
     List<T> findAll() throws ObjectNotFound;
 
+    List<T> findLimitedNumberFromBeginning(int numberOfObjects) throws ObjectNotFound;
+
     T save(T object);
 
     List<T> saveAll(List<T> objects);

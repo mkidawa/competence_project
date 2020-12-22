@@ -2,6 +2,7 @@ package pl.teamsix.competenceproject.domain.service.trace;
 
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Trace;
+import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
 import pl.teamsix.competenceproject.domain.exception.TraceNotFound;
 import pl.teamsix.competenceproject.domain.repository.HotspotRepository;
 import pl.teamsix.competenceproject.domain.repository.TraceRepository;
@@ -20,7 +21,7 @@ public class TraceServiceImpl implements TraceService {
 
     /*------------------------ METHODS REGION ------------------------*/
     public TraceServiceImpl(UserRepository userRepository, HotspotRepository hotspotRepository,
-            TraceRepository traceRepository) {
+                            TraceRepository traceRepository) {
         this.userRepository = userRepository;
         this.hotspotRepository = hotspotRepository;
         this.traceRepository = traceRepository;
@@ -46,6 +47,11 @@ public class TraceServiceImpl implements TraceService {
         }
 
         return traces;
+    }
+
+    @Override
+    public List<Trace> findLimitedNumberFromBeginning(int numberOfObjects) throws ObjectNotFound {
+        return findAll().subList(0, numberOfObjects);
     }
 
     @Override
