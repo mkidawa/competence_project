@@ -91,6 +91,8 @@ public class UserInterface {
         System.out.println("\t2. Display All Hotspots");
         System.out.println("\t4. Display Certain Number Of Users");
         System.out.println("\t5. Generate Users");
+        System.out.println("Anonymization");
+        System.out.println("\t6. Anonymizate Users Data");
         System.out.println("Analysis");
         System.out.println("\t8. Number Of Users By Hours");
         System.out.println("\t0. Exit");
@@ -134,7 +136,7 @@ public class UserInterface {
                 break;
             }
             case "6": {
-
+                dataAnonymizator.anonymizateUser();
                 break;
             }
             case "7": {
