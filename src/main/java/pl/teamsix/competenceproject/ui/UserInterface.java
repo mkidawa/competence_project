@@ -1,8 +1,11 @@
 package pl.teamsix.competenceproject.ui;
 
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.springframework.stereotype.Component;
+import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
 import pl.teamsix.competenceproject.domain.service.hotspot.HotspotService;
 import pl.teamsix.competenceproject.domain.service.trace.TraceService;
 import pl.teamsix.competenceproject.domain.service.user.UserBackupService;
@@ -12,6 +15,8 @@ import pl.teamsix.competenceproject.logic.anonymization.DataAnonymizator;
 import pl.teamsix.competenceproject.logic.generation.HotspotsGenerator;
 import pl.teamsix.competenceproject.logic.generation.TracesGenerator;
 import pl.teamsix.competenceproject.logic.generation.UsersGenerator;
+
+import java.util.Scanner;
 
 @Component
 public class UserInterface {
@@ -31,6 +36,8 @@ public class UserInterface {
 
     private final DataAnonymizator dataAnonymizator;
     private final DataAnalysis dataAnalysis;
+
+    private final Scanner scanner = new Scanner(System.in);
 
     private final SparkSession sparkTrace = SparkSession.builder()
             .master("local")
@@ -56,18 +63,118 @@ public class UserInterface {
         this.dataAnalysis = dataAnalysis;
     }
 
-    public void initialize() {
-        // TODO HERE IMPLEMENT ALL CMD STUFF - FIELD SHOWN ABOVE ARE INJECTED USING IOC - SO THEY
-        //  ARE INITIALIZED IN CTOR AUTOMATICALLY
-
+    public void initialize() throws ObjectNotFound {
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
+        String choice;
+        printAuthorsInfo();
+
+        do {
+            printMenu();
+            choice = readFromStringInput();
+            performSelectedAction(jsc, choice);
+        } while (!choice.equals(String.valueOf(0)));
+
+        jsc.close();
+    }
+
+    private void printAuthorsInfo() {
+        //        TODO Authors of program and overall description
+        printSeparator();
+        System.out.println("");
+        printSeparator();
+    }
+
+    private void printMenu() {
+        //        TODO FINISH
+        System.out.println("CRUD");
+        System.out.println("\t1. Display All Users");
+        System.out.println("\t2. Display All Hotspots");
+        System.out.println("Analysis");
+        System.out.println("\t8. Number Of Users By Hours");
+        System.out.println("\t0. Exit");
+        System.out.print("\nYour Choice: ");
+    }
+
+    private void performSelectedAction(JavaSparkContext jsc, String choice) throws ObjectNotFound {
+
+        // TODO HERE YOU HAVE ALL ANALYSIS METHODS CALL, REMEMBER TO ADD OPTIONS TO CHOOSE HOW
+        //  MANY OF ITEMS SHOULD BE SHOWN I MEAN 200 NUMBER
         //        this.dataAnalysis.rankByUsersInHotspot(jsc).show(200, false);
         //        this.dataAnalysis.rankByTimeSpentInHotspot(jsc).show(200, false);
         //        this.dataAnalysis.userTimeSpentInHotspot(jsc).show(200, false);
         //        this.dataAnalysis.rankByFrequentUsers(jsc).show(200, false);
         //        this.dataAnalysis.numberOfUsersByHours(jsc).show(200, false);
         //        System.out.println(this.dataAnalysis.longestRoute(jsc));
-        this.dataAnalysis.numberOfUsersByHours(jsc).show(200, false);
-        jsc.close();
+        //        this.dataAnalysis.numberOfUsersByHours(jsc).show(200, false);
+
+        switch (choice) {
+            case "1": {
+                //TODO ADD NICE WAY TO DISPLAY THIS DATA, MAYBE FANCY LIBRARY WITH TABLES ???
+                System.out.println(userService.findAll());
+                break;
+            }
+            case "2": {
+                System.out.println(hotspotService.findAll());
+                break;
+            }
+            case "3": {
+
+                break;
+            }
+            case "4": {
+
+                break;
+            }
+            case "5": {
+
+                break;
+            }
+            case "6": {
+
+                break;
+            }
+            case "7": {
+
+                break;
+            }
+            case "8": {
+                Dataset<Row> result = this.dataAnalysis.numberOfUsersByHours(jsc);
+                // TODO OR MAYBE SAVE TO FILE ???
+                result.show(200, false);
+                break;
+            }
+            case "9": {
+
+                break;
+            }
+            case "10": {
+
+                break;
+            }
+            default: {
+                //TODO WRONG VALUE INFO
+            }
+        }
+    }
+
+    private void requestNumberOfRows() {
+        //        todo finish this Kamil
+        System.out.println();
+    }
+
+    private void printSeparator() {
+        System.out.println("\n-----------------------------------------------------------------\n");
+    }
+
+    private String readFromStringInput() {
+        return scanner.nextLine();
+    }
+
+    private Double readFromDoubleInput() {
+        return Double.valueOf(readFromStringInput());
+    }
+
+    private Integer readFromIntegerInput() {
+        return Integer.valueOf(readFromStringInput());
     }
 }
