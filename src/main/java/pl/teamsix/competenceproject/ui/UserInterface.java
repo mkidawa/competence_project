@@ -85,10 +85,11 @@ public class UserInterface {
     }
 
     private void printMenu() {
-        //        TODO FINISH
+        //        TODO FINISH - ADD ALL OPTIONS
         System.out.println("CRUD");
         System.out.println("\t1. Display All Users");
         System.out.println("\t2. Display All Hotspots");
+        System.out.println("\t4. Display Certain Number Of Users");
         System.out.println("Analysis");
         System.out.println("\t8. Number Of Users By Hours");
         System.out.println("\t0. Exit");
@@ -122,7 +123,8 @@ public class UserInterface {
                 break;
             }
             case "4": {
-
+                final int numberOfObjects = requestNumberOfObjects();
+                System.out.println(userService.findLimitedNumberFromBeginning(numberOfObjects));
                 break;
             }
             case "5": {
@@ -138,9 +140,10 @@ public class UserInterface {
                 break;
             }
             case "8": {
+                final int numberOfRows = requestNumberOfRows();
                 Dataset<Row> result = this.dataAnalysis.numberOfUsersByHours(jsc);
                 // TODO OR MAYBE SAVE TO FILE ???
-                result.show(200, false);
+                result.show(numberOfRows, false);
                 break;
             }
             case "9": {
@@ -157,9 +160,14 @@ public class UserInterface {
         }
     }
 
-    private void requestNumberOfRows() {
-        //        todo finish this Kamil
-        System.out.println();
+    private int requestNumberOfRows() {
+        System.out.print("Enter Number Of Rows To Display: ");
+        return readFromIntegerInput();
+    }
+
+    private int requestNumberOfObjects() {
+        System.out.print("Enter Number Of Rows To Display: ");
+        return readFromIntegerInput();
     }
 
     private void printSeparator() {
@@ -170,11 +178,11 @@ public class UserInterface {
         return scanner.nextLine();
     }
 
-    private Double readFromDoubleInput() {
+    private double readFromDoubleInput() {
         return Double.valueOf(readFromStringInput());
     }
 
-    private Integer readFromIntegerInput() {
+    private int readFromIntegerInput() {
         return Integer.valueOf(readFromStringInput());
     }
 }
