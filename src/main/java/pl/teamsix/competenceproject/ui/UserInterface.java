@@ -90,6 +90,7 @@ public class UserInterface {
         System.out.println("\t1. Display All Users");
         System.out.println("\t2. Display All Hotspots");
         System.out.println("\t4. Display Certain Number Of Users");
+        System.out.println("\t5. Generate Users");
         System.out.println("Analysis");
         System.out.println("\t8. Number Of Users By Hours");
         System.out.println("\t0. Exit");
@@ -128,7 +129,8 @@ public class UserInterface {
                 break;
             }
             case "5": {
-
+                final int numberOfItemToGenerate = requestNumberOfItemToGenerate("Users");
+                usersGenerator.generate(numberOfItemToGenerate);
                 break;
             }
             case "6": {
@@ -167,6 +169,11 @@ public class UserInterface {
 
     private int requestNumberOfObjects() {
         System.out.print("Enter Number Of Rows To Display: ");
+        return readFromIntegerInput();
+    }
+
+    private int requestNumberOfItemToGenerate(String itemName) {
+        System.out.print("Enter Number Of " + itemName + " To Generate: ");
         return readFromIntegerInput();
     }
 
