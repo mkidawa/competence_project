@@ -1,7 +1,8 @@
 package pl.teamsix.competenceproject.logic;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +12,10 @@ public class FileReader {
 
     /*------------------------ METHODS REGION ------------------------*/
     public List readFromSimpleFile(String filePath) {
-        ArrayList<String> data = new ArrayList<>();
+        List<String> data = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new java.io.FileReader(filePath))) {
-            String sCurrentLine;
-
-            while ((sCurrentLine = reader.readLine()) != null) {
-                data.add(sCurrentLine);
-            }
-
+        try {
+            data = Files.readAllLines(Paths.get(filePath));
         } catch (IOException e) {
             e.printStackTrace();
         }
