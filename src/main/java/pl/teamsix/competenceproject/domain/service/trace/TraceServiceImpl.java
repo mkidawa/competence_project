@@ -55,6 +55,11 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
+    public long count() {
+        return traceRepository.count();
+    }
+
+    @Override
     public Trace save(Trace object) {
         return traceRepository.save(object);
     }

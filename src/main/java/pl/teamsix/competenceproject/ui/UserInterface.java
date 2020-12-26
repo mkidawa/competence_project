@@ -114,10 +114,12 @@ public class UserInterface {
         switch (choice) {
             case "1": {
                 //TODO ADD NICE WAY TO DISPLAY THIS DATA, MAYBE FANCY LIBRARY WITH TABLES ???
+                System.out.println("Number Of Users: " + userService.count());
                 System.out.println(userService.findAll());
                 break;
             }
             case "2": {
+                System.out.println("Number Of Hotspots: " + hotspotService.count());
                 System.out.println(hotspotService.findAll());
                 break;
             }

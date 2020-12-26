@@ -48,6 +48,11 @@ public class HotspotServiceImpl implements HotspotService {
     }
 
     @Override
+    public long count() {
+        return hotspotRepository.count();
+    }
+
+    @Override
     public Hotspot save(Hotspot object) {
         return hotspotRepository.save(object);
     }

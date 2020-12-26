@@ -54,6 +54,11 @@ public class UserBackupServiceImpl implements UserBackupService {
     }
 
     @Override
+    public long count() {
+        return userBackupRepository.count();
+    }
+
+    @Override
     public UserBackup save(UserBackup object) {
         return userBackupRepository.save(object);
     }

@@ -15,4 +15,6 @@ public interface BaseService<T> {
     T save(T object);
 
     List<T> saveAll(List<T> objects);
+
+    long count();
 }
