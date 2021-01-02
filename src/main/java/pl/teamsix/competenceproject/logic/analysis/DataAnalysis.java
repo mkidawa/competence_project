@@ -372,7 +372,7 @@ public class DataAnalysis {
         return model.transform(dataset);
     }
 
-    static class RowRecord implements Serializable {
+    public static class RowRecord implements Serializable {
         String userId;
         Integer numOfTraces;
         String traces;
