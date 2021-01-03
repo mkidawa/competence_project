@@ -31,7 +31,7 @@ public class TracesGenerator {
         double lambda = avgMovementsPerHour / MILLISECONDS_IN_HOUR;
         final ExponentialDistribution exitDistribution = new ExponentialDistribution(1.0 / lambda);
         final ExponentialDistribution[] entryDistributions = new ExponentialDistribution[24];
-        for (int i = 1; i < 24; i++) {
+        for (int i = 0; i < 24; i++) {
             entryDistributions[i] =
                     new ExponentialDistribution(1.0 / (lambda * Math.exp(-(Math.pow(i - 12, 2) / 40.0))));
         }

@@ -246,7 +246,9 @@ public class UserInterface {
                 break;
             }
             default: {
-                System.out.println("Wrong number, please choose again");
+                if (!choice.equals(String.valueOf(0))) {
+                    System.out.println("Wrong number, please choose again");
+                }
             }
         }
     }
