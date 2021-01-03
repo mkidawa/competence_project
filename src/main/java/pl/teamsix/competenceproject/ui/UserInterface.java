@@ -14,6 +14,7 @@ import pl.teamsix.competenceproject.domain.service.trace.TraceService;
 import pl.teamsix.competenceproject.domain.service.user.UserBackupService;
 import pl.teamsix.competenceproject.domain.service.user.UserService;
 import pl.teamsix.competenceproject.logic.analysis.DataAnalysis;
+import pl.teamsix.competenceproject.logic.analysis.RowRecord;
 import pl.teamsix.competenceproject.logic.anonymization.DataAnonymizator;
 import pl.teamsix.competenceproject.logic.generation.HotspotsGenerator;
 import pl.teamsix.competenceproject.logic.generation.TracesGenerator;
@@ -67,7 +68,7 @@ public class UserInterface {
         this.dataAnalysis = dataAnalysis;
     }
 
-    public void initialize() throws ObjectNotFound {
+    public void initialize() {
         JavaSparkContext jsc = new JavaSparkContext(sparkTrace.sparkContext());
         String choice;
         printAuthorsInfo();
@@ -329,8 +330,8 @@ public class UserInterface {
         }
     }
 
-    private void printLongestRoute(List<DataAnalysis.RowRecord> longestRoutes) {
-        for (DataAnalysis.RowRecord longestRoute : longestRoutes) {
+    private void printLongestRoute(List<RowRecord> longestRoutes) {
+        for (RowRecord longestRoute : longestRoutes) {
             System.out.println(longestRoute.toString());
         }
     }

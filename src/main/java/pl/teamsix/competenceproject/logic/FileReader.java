@@ -11,7 +11,7 @@ public class FileReader {
     /*------------------------ FIELDS REGION ------------------------*/
 
     /*------------------------ METHODS REGION ------------------------*/
-    public List readFromSimpleFile(String filePath) {
+    public List<String> readFromSimpleFile(String filePath) {
         List<String> data = new ArrayList<>();
 
         try {
