@@ -2,6 +2,7 @@ package pl.teamsix.competenceproject.domain.service.trace;
 
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Trace;
+import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
 import pl.teamsix.competenceproject.domain.exception.TraceNotFound;
 import pl.teamsix.competenceproject.domain.repository.HotspotRepository;
 import pl.teamsix.competenceproject.domain.repository.TraceRepository;
@@ -20,7 +21,7 @@ public class TraceServiceImpl implements TraceService {
 
     /*------------------------ METHODS REGION ------------------------*/
     public TraceServiceImpl(UserRepository userRepository, HotspotRepository hotspotRepository,
-            TraceRepository traceRepository) {
+                            TraceRepository traceRepository) {
         this.userRepository = userRepository;
         this.hotspotRepository = hotspotRepository;
         this.traceRepository = traceRepository;
@@ -49,6 +50,16 @@ public class TraceServiceImpl implements TraceService {
     }
 
     @Override
+    public List<Trace> findLimitedNumberFromBeginning(int numberOfObjects) throws ObjectNotFound {
+        return findAll().subList(0, numberOfObjects);
+    }
+
+    @Override
+    public long count() {
+        return traceRepository.count();
+    }
+
+    @Override
     public Trace save(Trace object) {
         return traceRepository.save(object);
     }
@@ -56,5 +67,20 @@ public class TraceServiceImpl implements TraceService {
     @Override
     public List<Trace> saveAll(List<Trace> objects) {
         return traceRepository.saveAll(objects);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        traceRepository.deleteById(id);
+    }
+
+    @Override
+    public void delete(Trace object) {
+        traceRepository.delete(object);
+    }
+
+    @Override
+    public void deleteAll() {
+        traceRepository.deleteAll();
     }
 }

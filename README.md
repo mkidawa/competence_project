@@ -21,6 +21,15 @@ spring.data.mongodb.database=competence_project_name
 
 #### Important notes
 * Please do not add Lombok because it is a heavy dependency and sometimes causes some problems
+* For the production version, console logs have been turned off so don't worry if you 
+think that they magically disappeared. In order to turn them on just uncomment these 
+lines in application.properties file
+```
+logging.level.root=OFF
+logging.level.org.springframework.web=OFF
+logging.level.org.hibernate=OFF
+spring.main.banner-mode=off
+```
 
 #### Useful links
 * [MongoDB download](https://www.mongodb.com/try/download/community)

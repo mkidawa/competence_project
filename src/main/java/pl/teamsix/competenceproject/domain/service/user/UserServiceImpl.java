@@ -2,6 +2,7 @@ package pl.teamsix.competenceproject.domain.service.user;
 
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.User;
+import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
 import pl.teamsix.competenceproject.domain.exception.UserNotFound;
 import pl.teamsix.competenceproject.domain.repository.UserRepository;
 
@@ -39,6 +40,16 @@ public class UserServiceImpl implements UserService {
         }
 
         return people;
+    }
+
+    @Override
+    public List<User> findLimitedNumberFromBeginning(int numberOfObjects) throws ObjectNotFound {
+        return findAll().subList(0, numberOfObjects);
+    }
+
+    @Override
+    public long count() {
+        return userRepository.count();
     }
 
     @Override

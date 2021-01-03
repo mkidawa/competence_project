@@ -3,6 +3,7 @@ package pl.teamsix.competenceproject.domain.service.hotspot;
 import org.springframework.stereotype.Service;
 import pl.teamsix.competenceproject.domain.entity.Hotspot;
 import pl.teamsix.competenceproject.domain.exception.HotspotNotFound;
+import pl.teamsix.competenceproject.domain.exception.ObjectNotFound;
 import pl.teamsix.competenceproject.domain.repository.HotspotRepository;
 
 import java.util.List;
@@ -39,6 +40,16 @@ public class HotspotServiceImpl implements HotspotService {
         }
 
         return hotspots;
+    }
+
+    @Override
+    public List<Hotspot> findLimitedNumberFromBeginning(int numberOfObjects) throws ObjectNotFound {
+        return findAll().subList(0, numberOfObjects);
+    }
+
+    @Override
+    public long count() {
+        return hotspotRepository.count();
     }
 
     @Override

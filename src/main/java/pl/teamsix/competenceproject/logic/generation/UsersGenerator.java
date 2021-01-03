@@ -64,7 +64,7 @@ public class UsersGenerator {
                 parseInt(segments[2]) - parseInt(segments[1])) + parseInt(segments[1]) + 1;
         //getting hobby/hobbies - up to 3
         int noOfHobbies = rand.nextInt(3) + 1;
-        ArrayList interests = new ArrayList();
+        ArrayList<String> interests = new ArrayList();
         for (int i = 0; i != noOfHobbies; i++) {
             interests.add(hobbiesList.get(rand.nextInt(hobbiesList.size())));
         }
