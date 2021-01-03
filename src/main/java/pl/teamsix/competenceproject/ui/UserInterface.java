@@ -160,7 +160,11 @@ public class UserInterface {
                 System.out.println("Traces Generation");
                 final double duration = requestDuration();
                 final int avgMovements = requestAvgMovementsPerHour();
-                tracesGenerator.generate(userService.findAll(), hotspotService.findAll(), java.sql.Date.valueOf(java.time.LocalDate.now()), duration, avgMovements);
+                tracesGenerator.generate(
+                        userService.findAll(), hotspotService.findAll(),
+                        java.sql.Date.valueOf(java.time.LocalDate.now()),
+                        duration, avgMovements
+                );
                 break;
             }
             case "8": {
@@ -257,9 +261,13 @@ public class UserInterface {
 
     private void printUsers(List<User> users) {
         String format = "%-25s%-15s%-30s%-7s%-8s%-50s%-20s%-10s%n";
-        System.out.printf(format, "id", "firstName", "lastName", "age", "gender", "interests", "profile", "phoneNumber");
+        System.out.printf(format, "id", "firstName", "lastName", "age",
+                "gender", "interests", "profile", "phoneNumber");
         for (User user : users) {
-            System.out.printf(format, user.getId(), user.getFirstName(), user.getLastName(), user.getAge(), user.getGender(), user.getInterests(), user.getProfile(), user.getPhoneNumber());
+            System.out.printf(
+                    format, user.getId(), user.getFirstName(), user.getLastName(), user.getAge(),
+                    user.getGender(), user.getInterests(), user.getProfile(), user.getPhoneNumber()
+            );
         }
     }
 
@@ -267,7 +275,10 @@ public class UserInterface {
         String format = "%-25s%-60s%-12s%-20s%-20s%n";
         System.out.printf(format, "id", "name", "type", "x", "y");
         for (Hotspot hotspot : hotspots) {
-            System.out.printf(format, hotspot.getId(), hotspot.getName(), hotspot.getType(), hotspot.getX(), hotspot.getY());
+            System.out.printf(
+                    format, hotspot.getId(), hotspot.getName(),
+                    hotspot.getType(), hotspot.getX(), hotspot.getY()
+            );
         }
     }
 
@@ -275,7 +286,10 @@ public class UserInterface {
         String format = "%-27s%-27s%-27s%-30s%-30s%n";
         System.out.printf(format, "id", "user", "hotspot", "entryTime", "exitTime");
         for (Trace trace : traces) {
-            System.out.printf(format, trace.getId(), trace.getUser().getId(), trace.getHotspot().getId(), trace.getEntryTime(), trace.getExitTime());
+            System.out.printf(
+                    format, trace.getId(), trace.getUser().getId(),
+                    trace.getHotspot().getId(), trace.getEntryTime(), trace.getExitTime()
+            );
         }
     }
 
