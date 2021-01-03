@@ -68,4 +68,19 @@ public class TraceServiceImpl implements TraceService {
     public List<Trace> saveAll(List<Trace> objects) {
         return traceRepository.saveAll(objects);
     }
+
+    @Override
+    public void deleteById(String id) {
+        traceRepository.deleteById(id);
+    }
+
+    @Override
+    public void delete(Trace object) {
+        traceRepository.delete(object);
+    }
+
+    @Override
+    public void deleteAll() {
+        traceRepository.deleteAll();
+    }
 }

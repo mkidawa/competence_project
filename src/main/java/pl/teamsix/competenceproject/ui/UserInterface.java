@@ -171,7 +171,7 @@ public class UserInterface {
                 userService.deleteAll();
                 userBackupService.deleteAll();
                 hotspotService.deleteAll();
-                // traceService.deleteAll();
+                traceService.deleteAll();
                 break;
             }
             case "9": {
