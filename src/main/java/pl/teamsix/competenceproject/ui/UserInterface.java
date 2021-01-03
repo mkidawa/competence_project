@@ -97,7 +97,7 @@ public class UserInterface {
     }
 
     private void printMenu() {
-        System.out.println("CRUD");
+        System.out.println("\nCRUD");
         System.out.println("\t1. Display All Users");
         System.out.println("\t2. Display All Hotspots");
         System.out.println("\t3. Display All Traces");
@@ -119,37 +119,61 @@ public class UserInterface {
         System.out.print("\nYour Choice: ");
     }
 
-    private void performSelectedAction(JavaSparkContext jsc, String choice) throws ObjectNotFound {
+    private void performSelectedAction(JavaSparkContext jsc, String choice) {
 
         switch (choice) {
             case "1": {
                 System.out.println("Number Of Users: " + userService.count());
-                printUsers(userService.findAll());
+                try {
+                    printUsers(userService.findAll());
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Users");
+                }
                 break;
             }
             case "2": {
                 System.out.println("Number Of Hotspots: " + hotspotService.count());
-                printHotspots(hotspotService.findAll());
+                try {
+                    printHotspots(hotspotService.findAll());
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Hotspots");
+                }
                 break;
             }
             case "3": {
                 System.out.println("Number Of Traces: " + traceService.count());
-                printTraces(traceService.findAll());
+                try {
+                    printTraces(traceService.findAll());
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Traces");
+                }
                 break;
             }
             case "4": {
                 final int numberOfObjects = requestNumberOfObjects();
-                printUsers(userService.findLimitedNumberFromBeginning(numberOfObjects));
+                try {
+                    printUsers(userService.findLimitedNumberFromBeginning(numberOfObjects));
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Users");
+                }
                 break;
             }
             case "5": {
                 final int numberOfObjects = requestNumberOfObjects();
-                printHotspots(hotspotService.findLimitedNumberFromBeginning(numberOfObjects));
+                try {
+                    printHotspots(hotspotService.findLimitedNumberFromBeginning(numberOfObjects));
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Hotspots");
+                }
                 break;
             }
             case "6": {
                 final int numberOfObjects = requestNumberOfObjects();
-                printTraces(traceService.findLimitedNumberFromBeginning(numberOfObjects));
+                try {
+                    printTraces(traceService.findLimitedNumberFromBeginning(numberOfObjects));
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Traces");
+                }
                 break;
             }
             case "7": {
@@ -160,11 +184,15 @@ public class UserInterface {
                 System.out.println("Traces Generation");
                 final double duration = requestDuration();
                 final int avgMovements = requestAvgMovementsPerHour();
-                tracesGenerator.generate(
-                        userService.findAll(), hotspotService.findAll(),
-                        java.sql.Date.valueOf(java.time.LocalDate.now()),
-                        duration, avgMovements
-                );
+                try {
+                    tracesGenerator.generate(
+                            userService.findAll(), hotspotService.findAll(),
+                            java.sql.Date.valueOf(java.time.LocalDate.now()),
+                            duration, avgMovements
+                    );
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Users or Hotspots");
+                }
                 break;
             }
             case "8": {
@@ -175,7 +203,11 @@ public class UserInterface {
                 break;
             }
             case "9": {
-                dataAnonymizator.anonymizateUser();
+                try {
+                    dataAnonymizator.anonymizateUser();
+                } catch (ObjectNotFound objectNotFound) {
+                    printInfoEmptyCollection("Users");
+                }
                 break;
             }
             case "10": {
@@ -241,6 +273,10 @@ public class UserInterface {
     private int requestAvgMovementsPerHour() {
         System.out.print("Enter Average Movements Per Hour: ");
         return readFromIntegerInput();
+    }
+
+    private void printInfoEmptyCollection(String collectionName) {
+        System.out.println("There Are No " + collectionName + " In Database !!!");
     }
 
     private void printSeparator() {
