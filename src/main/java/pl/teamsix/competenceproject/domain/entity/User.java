@@ -12,11 +12,13 @@ public class User extends UserBackup {
 
     /*------------------------ FIELDS REGION ------------------------*/
     private String hashedId;
+    private boolean isAlreadyAnonymizated;
 
     /*------------------------ METHODS REGION ------------------------*/
     public User(String firstName, String lastName, int age, char gender,
                 ArrayList interests, String profile, String phoneNumber) {
         super(firstName, lastName, age, gender, interests, profile, phoneNumber);
+        this.isAlreadyAnonymizated = false;
     }
 
     public String getHashedId() {
@@ -25,6 +27,14 @@ public class User extends UserBackup {
 
     public void setHashedId(String hashedId) {
         this.hashedId = hashedId;
+    }
+
+    public boolean isAlreadyAnonymizated() {
+        return isAlreadyAnonymizated;
+    }
+
+    public void setAlreadyAnonymizated(boolean alreadyAnonymizated) {
+        isAlreadyAnonymizated = alreadyAnonymizated;
     }
 
     @Override
@@ -41,6 +51,7 @@ public class User extends UserBackup {
 
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
+                .append(isAlreadyAnonymizated, user.isAlreadyAnonymizated)
                 .append(hashedId, user.hashedId)
                 .isEquals();
     }
@@ -50,6 +61,7 @@ public class User extends UserBackup {
         return new HashCodeBuilder(17, 37)
                 .appendSuper(super.hashCode())
                 .append(hashedId)
+                .append(isAlreadyAnonymizated)
                 .toHashCode();
     }
 
@@ -58,6 +70,7 @@ public class User extends UserBackup {
         return new ToStringBuilder(this)
                 .appendSuper(super.toString())
                 .append("hashedId", hashedId)
+                .append("isAlreadyAnomizated", isAlreadyAnonymizated)
                 .toString();
     }
 }

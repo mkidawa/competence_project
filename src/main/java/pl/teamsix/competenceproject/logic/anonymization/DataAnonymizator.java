@@ -34,13 +34,15 @@ public class DataAnonymizator {
         List<User> users = userService.findAll();
 
         users.forEach((user) -> {
-            UserBackup userBackup = new UserBackup(
-                    user.getFirstName(), user.getLastName(), user.getAge(), user.getGender(),
-                    user.getInterests(), user.getProfile(), user.getPhoneNumber()
-            );
+            if (!user.isAlreadyAnonymizated()) {
+                UserBackup userBackup = new UserBackup(
+                        user.getFirstName(), user.getLastName(), user.getAge(), user.getGender(),
+                        user.getInterests(), user.getProfile(), user.getPhoneNumber()
+                );
 
-            userBackupService.save(userBackup);
-            changeUserProperties(user, userBackup);
+                userBackupService.save(userBackup);
+                changeUserProperties(user, userBackup);
+            }
         });
 
         userService.updateAll(users);
@@ -48,6 +50,7 @@ public class DataAnonymizator {
 
     private void changeUserProperties(User user, UserBackup userBackup) {
         user.setHashedId(HashingProvider.hashString(userBackup.getId()));
+        user.setAlreadyAnonymizated(true);
 
         User randomUser = null;
         do {
