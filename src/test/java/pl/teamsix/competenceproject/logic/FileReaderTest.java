@@ -1,12 +1,13 @@
 package pl.teamsix.competenceproject.logic;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static pl.teamsix.competenceproject.logic.Constants.FIRST_NAMES_DB_TXT;
 
+@Disabled
 class FileReaderTest {
 
     private final FileReader fileReader = new FileReader();
