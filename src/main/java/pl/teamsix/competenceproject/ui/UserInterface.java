@@ -19,8 +19,11 @@ import pl.teamsix.competenceproject.logic.anonymization.DataAnonymizator;
 import pl.teamsix.competenceproject.logic.generation.HotspotsGenerator;
 import pl.teamsix.competenceproject.logic.generation.TracesGenerator;
 import pl.teamsix.competenceproject.logic.generation.UsersGenerator;
+import scala.Int;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 @Component
@@ -116,6 +119,12 @@ public class UserInterface {
         System.out.println("\t13. User Time Spent In Hotspot");
         System.out.println("\t14. Rank By Frequent Users");
         System.out.println("\t15. Longest Route");
+        System.out.println("\t16. Most Popular Next Hotspot");
+        System.out.println("\t17. Cluster By Users");
+        System.out.println("\t18. Cluster By Time Spent");
+        System.out.println("\t19. Cluster By Users In Week Day");
+        System.out.println("\t20. Cluster By Day Time");
+        System.out.println("\t21. Number Of Users By Week Day");
         System.out.println("\t0. Exit");
         System.out.print("\nYour Choice: ");
     }
@@ -245,6 +254,52 @@ public class UserInterface {
                 printLongestRoute(this.dataAnalysis.longestRoute(jsc));
                 break;
             }
+
+            case "16": {
+                Map<String,Integer> results = this.dataAnalysis.mostPopularNextHotspot(jsc);
+                printMostPopularNextHotspot(results);
+                break;
+            }
+
+            case "17": {
+                final int numberOfGroups = requestNumberOfGroups();
+                final int numberOfRows = requestNumberOfRows();
+                Dataset<Row> result = this.dataAnalysis.clusterByUsers(numberOfGroups,jsc);
+                result.show(numberOfRows, false);
+                break;
+            }
+
+            case "18": {
+                final int numberOfGroups = requestNumberOfGroups();
+                final int numberOfRows = requestNumberOfRows();
+                Dataset<Row> result = this.dataAnalysis.clusterByTimeSpent(numberOfGroups,jsc);
+                result.show(numberOfRows, false);
+                break;
+            }
+
+            case "19": {
+                final int numberOfGroups = requestNumberOfGroups();
+                final int numberOfRows = requestNumberOfRows();
+                Dataset<Row> result = this.dataAnalysis.clusterByUsersInWeekDay(numberOfGroups,jsc);
+                result.show(numberOfRows, false);
+                break;
+            }
+
+            case "20": {
+                final int numberOfGroups = requestNumberOfGroups();
+                final int numberOfRows = requestNumberOfRows();
+                Dataset<Row> result = this.dataAnalysis.clusterByDayTime(numberOfGroups,jsc);
+                result.show(numberOfRows, false);
+                break;
+            }
+
+            case "21": {
+                final int numberOfRows = requestNumberOfRows();
+                Dataset<Row> result = this.dataAnalysis.numberOfUsersByWeekDay(jsc);
+                result.show(numberOfRows, false);
+                break;
+            }
+
             default: {
                 if (!choice.equals(String.valueOf(0))) {
                     System.out.println("Wrong number, please choose again");
@@ -271,6 +326,11 @@ public class UserInterface {
     private double requestDuration() {
         System.out.print("Enter Duration Time In Hours: ");
         return readFromDoubleInput();
+    }
+
+    private int requestNumberOfGroups() {
+        System.out.print("Enter number of groups: ");
+        return readFromIntegerInput();
     }
 
     private int requestAvgMovementsPerHour() {
@@ -335,6 +395,14 @@ public class UserInterface {
     private void printLongestRoute(List<RowRecord> longestRoutes) {
         for (RowRecord longestRoute : longestRoutes) {
             System.out.println(longestRoute.toString());
+        }
+    }
+
+    private void printMostPopularNextHotspot(Map<String,Integer> mostPopularNextHotspots){
+        String format = "%-60s%-25s%n";
+        System.out.printf(format, "hotspot name","num of traces");
+        for (Map.Entry<String, Integer> entry : mostPopularNextHotspots.entrySet()) {
+            System.out.printf(format, entry.getKey(), entry.getValue());
         }
     }
 }

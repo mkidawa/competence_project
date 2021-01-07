@@ -66,7 +66,9 @@ public class DataAnalysis {
                     round(sum(col("timeSpent")), 2),
                     round(avg(col("timeSpent")), 2),
                     round(max(col("timeSpent")), 2)
-            );
+            ).sort(
+                        col("round(sum(timeSpent), 2)").desc()
+                );
     }
 
     public Dataset<Row> rankByFrequentUsers(JavaSparkContext jsc) {
@@ -184,7 +186,7 @@ public class DataAnalysis {
                 );
     }
 
-    public List<RowRecord> longestRoute(JavaSparkContext jsc){
+    public List<RowRecord> longestRoute(JavaSparkContext jsc) {
         Dataset<Row> tempTrace = MongoSpark.load(jsc).toDF()
             .select(
                     col("user.$id.oid").as("user"),
@@ -200,42 +202,56 @@ public class DataAnalysis {
         Dataset<Row> tempUser = MongoSpark.load(jsc, readConfig).toDF()
                 .select(
                         col("_id.oid")
-                );
+                ).limit(10);
 
-        String id;
-        List<Row> route,
-                list = tempUser.collectAsList(),
-                currentRoute = new ArrayList<>(),
-                longestKnownRoute = new ArrayList<>();
-        Dataset<Row> set;
+        List<Row> list = tempUser.collectAsList();
         List<RowRecord> records = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+        int i = 0;
 
-        for(Row row : list){
-            id = row.get(0).toString();
-            set = tempTrace
-                    .select("hotspot")
-                    .where("user = '" + id + "'");
-            route = set.collectAsList();
-            longestKnownRoute.clear();
-            for(Row currRoute: route){
-                if(currentRoute.contains(currRoute)){
-                    if(currentRoute.size() > longestKnownRoute.size()){
+        for(Row row : list) {
+            threads.add(new Thread("" + i) {
+                public void run() {
+                    List<Row> currentRoute = new ArrayList<>();
+                    List<Row> longestKnownRoute = new ArrayList<>();
+                    String id = row.get(0).toString();
+                    Dataset<Row> set = tempTrace
+                            .select("hotspot")
+                            .where("user = '" + id + "'");
+                    List<Row> route = set.collectAsList();
+                    longestKnownRoute.clear();
+                    for (Row currRoute : route) {
+                        if (currentRoute.contains(currRoute)) {
+                            if (currentRoute.size() > longestKnownRoute.size()) {
+                                longestKnownRoute = new ArrayList<>(currentRoute);
+                            }
+                            currentRoute.clear();
+                        } else {
+                            currentRoute.add(currRoute);
+                        }
+                    }
+                    if (currentRoute.size() > longestKnownRoute.size()) {
                         longestKnownRoute = new ArrayList<>(currentRoute);
                     }
-                    currentRoute.clear();
-                } else {
-                    currentRoute.add(currRoute);
+                    records.add(new RowRecord(id, longestKnownRoute.size(), new ArrayList<>(longestKnownRoute)));
+                }
+            });
+
+            threads.get(threads.size()-1).start();
+
+            for (Thread thread : threads) {
+                try{
+                    thread.join();
+                }
+                catch (InterruptedException ex){
+                    System.out.println(ex);
                 }
             }
-            if(currentRoute.size() > longestKnownRoute.size()){
-                longestKnownRoute = new ArrayList<>(currentRoute);
-            }
-            records.add(new RowRecord(id, longestKnownRoute.size(), new ArrayList<>(longestKnownRoute)));
         }
         return records;
     }
 
-    public Map<String,Integer> mostPopularNextHotspot(JavaSparkContext jsc) {
+    public Map<String,Integer> mostPopularNextHotspot(JavaSparkContext jsc){
         Dataset<Row> tempTrace = MongoSpark.load(jsc).toDF()
                 .select(
                         col("user.$id.oid").as("user"),
@@ -251,28 +267,42 @@ public class DataAnalysis {
         Dataset<Row> tempHotspot = MongoSpark.load(jsc, readConfig).toDF()
                 .select(
                         col("_id.oid")
-                ).limit(5);
-        String id;
-        List<Row> userTrace,
-                list = tempHotspot.collectAsList();
-        Dataset<Row> set;
+                ).limit(50);
+
+        List<Row> list = tempHotspot.collectAsList();
         HashMap<String,Integer> allUsersTraces = new HashMap<>();
         List<String> userTraces = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+        int i = 0;
 
-        for(Row row : list){
-            id = row.get(0).toString();
-            set = tempTrace
-                    .select("hotspot")
-                    .where("user = '" + id + "'");
-            userTrace = set.collectAsList();
+        for(Row row : list) {
+            threads.add(new Thread("" + i) {
+                public void run() {
+                    String id = row.get(0).toString();
+                    Dataset<Row> set = tempTrace
+                            .select("hotspot")
+                            .where("user = '" + id + "'");
+                    List<Row> userTrace = set.collectAsList();
 
-            for(int i = 0; i < userTrace.size()-1; i++){
-                userTraces.add(
-                                userTrace.get(i).get(0).toString()+ "," +
-                                userTrace.get(i+1).get(0).toString());
+                    for (int i = 0; i < userTrace.size() - 1; i++) {
+                        userTraces.add(
+                                userTrace.get(i).get(0).toString() + "," +
+                                        userTrace.get(i + 1).get(0).toString());
+                    }
+                    userTraces.forEach(a -> allUsersTraces.merge(a, 1, Integer::sum));
+                    userTraces.clear();
+                }
+            });
+            threads.get(threads.size() - 1).start();
+            i++;
+        }
+        for (Thread thread: threads){
+            try{
+                thread.join();
             }
-            userTraces.forEach(a -> allUsersTraces.merge(a,1,Integer::sum));
-            userTraces.clear();
+            catch (InterruptedException ex){
+                System.out.println(ex);
+            }
         }
 
         Map<String,Integer> result = allUsersTraces.entrySet().stream()
@@ -324,14 +354,37 @@ public class DataAnalysis {
 
     public Dataset<Row> clusterByUsersInWeekDay(int k, JavaSparkContext jsc){
         VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"People in Monday", "People in Tuesday","People in Wednesday","People in Thursday","People in Friday","People in Saturday","People in Sunday"})
+                .setInputCols(new String[]{"0"})
                 .setOutputCol("features");
-        Dataset<Row> dataset = assembler.transform(numberOfUsersByWeekDay(jsc).na().drop()).select("hotspot","features");
+        Dataset<Row> data = numberOfUsersByWeekDay(jsc).na().drop().agg(
+                sum(col("People in Monday")).as("Monday"),
+                sum(col("People in Tuesday")).as("Tuesday"),
+                sum(col("People in Wednesday")).as("Wednesday"),
+                sum(col("People in Thursday")).as("Thursday"),
+                sum(col("People in Friday")).as("Friday"),
+                sum(col("People in Saturday")).as("Saturday"),
+                sum(col("People in Sunday")).as("Sunday"))
+                .withColumn("Day",lit(0));
+
+        Column[] cols = Arrays
+                .stream(data.columns())
+                .filter(x -> ! x.equals("Day"))
+                .map(n -> struct(lit(n).alias("c"), col(n).alias("v")))
+                .toArray(Column[]::new);
+
+        Dataset<Row> exploded_df = data.select( col("Day"), explode(array(cols)))
+                .groupBy(col("col.c"))
+                .pivot("Day")
+                .agg(first(col("col.v")))
+                .orderBy("c");
+
+        Dataset<Row> dataset = assembler.transform(exploded_df).select(col("c").as("Day of week"),col("features"));
 
         KMeans kMeans = new KMeans().setK(k).setSeed(1L);
         KMeansModel model = kMeans.fit(dataset);
 
         return model.transform(dataset);
+
     }
 
     public Dataset<Row> clusterByDayTime(int k, JavaSparkContext jsc){
